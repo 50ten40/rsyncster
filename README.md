@@ -1,4 +1,4 @@
-# Rsyncster
+# rsyncster
 CMS -> Static site generation using standard cli utilities.
 Dependencies
 * Wget
