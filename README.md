@@ -5,6 +5,7 @@ Dependencies
 * Wget
 * Rsync
 * Sed
+* Cron
 
 Backend environment 
 * Haproxy
