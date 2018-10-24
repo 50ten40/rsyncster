@@ -5,3 +5,8 @@ Dependencies
 * Wget
 * Rsync
 * Sed
+Backend environment 
+* Haproxy
+* Nginx
+* Apache2
+* Syncthing
