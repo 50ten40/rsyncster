@@ -1,5 +1,5 @@
 # rsyncster
-_CMS -> Static site generation using standard cli utilities. Philosophy is tl;dr. User experience is fast, clean, simple. Accessibility is important. Screen reader friendly._
+__CMS -> Static site generation using standard cli utilities. Philosophy is tl;dr. User experience is fast, clean, simple. Accessibility is important. Screen reader friendly.__
 
 Dependencies
 * Perl
