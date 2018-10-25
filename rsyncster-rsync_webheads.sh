@@ -35,7 +35,7 @@ nice -n 20 /usr/bin/rsync -avilzx --delete-before -e ssh /var/www/html/live/m.$O
 nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/sites-available/static.$ONEDOMAIN.conf webuser@$i:/etc/nginx/sites-available/
 
 # uncomment and edit to taste to automate nginx config activation 
-#ssh remote commend to setup symlink into sites-enabled
+#ssh remote command to setup symlink into sites-enabled
 #ssh root@$i "sudo systemctl condreload nginx"
 #ssh root@$i "systemctl status nginx"
 
