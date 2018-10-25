@@ -15,6 +15,6 @@ Backend environment
 * Syncthing
 
 CMS assumptions
-* Simplified user interface.
+* Simplified user interface. Bootstrap theme.
 * Mobile emphasis. No menus, mobile users can't see, don't use.
 * No ajax or sliding features etc.
