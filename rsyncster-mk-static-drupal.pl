@@ -8,7 +8,6 @@ my $staging_dir = '/path/to/staging/dir/';
 my $config_dir = '/etc/nginx/sites-available/';
 open(VIRTUALS, "virt_domains.list.test") or die $!;
 my @domains = <VIRTUALS>;
-my $string = "# Generated automagically on $nowstring. \n\n";
 
 foreach (@domains) { 
    chomp($_);
@@ -16,6 +15,7 @@ foreach (@domains) {
    my $config_filename = "static.$_.conf";
    my $config_path = $config_dir.$config_filename;
 
+   my $string = "# Generated automagically on $nowstring. \n\n"; 
    $string .= "server \{\n\n";
    $string .= "        listen       80;\n";
    $string .= "        listen       [::]:80;\n";
