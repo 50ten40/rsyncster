@@ -20,3 +20,4 @@ CMS assumptions
 * No ajax or sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
+* Default favicon updated
