@@ -1,5 +1,9 @@
 # rsyncster
-__CMS -> Static site generation using standard cli utilities. Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)__
+CMS -> Static site generation using standard cli utilities.
+
+Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, open content.
+
+This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
 Dependencies
 * Perl
