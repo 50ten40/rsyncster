@@ -22,10 +22,10 @@ CMS assumptions
 * Public facing assets are obsessively lean and easily consumed.
 
 Basic Drupal Workflow
-1 Change top level dns record. eg domain.tld -> subdomain.domain.tld
-2 Update $base_url in settings.php
-3 Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
-4 Turn off database logging (optional)
-5 Verify custom logos and favicon. Set in theme and global settings.(optional)
-6 Run scripts as needed
-7 Enjoy your new peace of mind.
+* Change top level dns record. eg domain.tld -> subdomain.domain.tld
+* Update $base_url in settings.php
+* Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
+* Turn off database logging (optional)
+* Verify custom logos and favicon. Set in theme and global settings.(optional)
+* Run scripts as needed
+* Enjoy your new peace of mind.
