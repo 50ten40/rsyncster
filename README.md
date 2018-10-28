@@ -1,5 +1,5 @@
 # rsyncster
-__CMS -> Static site generation using standard cli utilities. Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly.__
+__CMS -> Static site generation using standard cli utilities. Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)__
 
 Dependencies
 * Perl
@@ -27,5 +27,6 @@ Basic Drupal Workflow
 * Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
 * Turn off database logging (optional)
 * Verify custom logos and favicon. Set in theme and global settings.(optional)
+* Update scripts with your subdomain
 * Run scripts as needed
 * Enjoy your new peace of mind.
