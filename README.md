@@ -27,8 +27,9 @@ CMS assumptions
 
 Basic Drupal Workflow
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
-* Update $base_url in settings.php
+* Update $base_url in settings.php (required)
 * Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
+* Enable anonymous page caching (required)
 * Turn off database logging (optional)
 * Verify custom logos and favicon. Set in theme and global settings.(optional)
 * Update scripts with your subdomain
