@@ -20,4 +20,12 @@ CMS assumptions
 * No ajax or sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
-* Default favicon updated
+
+Basic Drupal Workflow
+1 Change top level dns record. eg domain.tld -> subdomain.domain.tld
+2 Update $base_url in settings.php
+3 Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
+4 Turn off database logging (optional)
+5 Verify custom logos and favicon. Set in theme and global settings.(optional)
+6 Run scripts as needed
+7 Enjoy your new peace of mind.
