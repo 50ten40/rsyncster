@@ -1,7 +1,7 @@
 # rsyncster
 CMS -> Static site generation using standard cli utilities.
 
-Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, open content.
+Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, 'cause your content is yours and should not be locked to your cloud provider.
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
