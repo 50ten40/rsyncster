@@ -1,7 +1,5 @@
 #!/usr/bin/perl -w
 
-# Use name-based virtual hosting.
-# See below $string variable
 use DateTime qw();
 my $nowstring =	DateTime->now->strftime('%d%b%Y');
 my $staging_dir = '/path/to/staging/dir/';
