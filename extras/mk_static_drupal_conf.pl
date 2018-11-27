@@ -13,7 +13,7 @@ foreach (@domains) {
    my $config_filename = "static.$_.conf";
    my $config_path = $config_dir.$config_filename;
 
-   my $string = "# Generated automagically on $nowstring. \n\n"; 
+   my $string = "# Generated via script on $nowstring. \n\n"; 
    $string .= "server \{\n\n";
    $string .= "        listen       80;\n";
    $string .= "        listen       [::]:80;\n";

@@ -1,0 +1,11 @@
+.stfolder
+.stfolder*
+*.stfolder*
+.stignore
+.stignore*
+*.stignore*
+.git
+.git*
+*.git*
+*/civicrm/*
+.changes*

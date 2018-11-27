@@ -1,13 +1,5 @@
 #!/bin/bash
 # Initialize static webhead
-# Syncthing syncs document root, this script symlinks to live folder.
-
-SYNC_DIR="/home/kelley/kg\ -\ Drupal\ Multisite/static_sites"
-LIVE_DIR=live
-DOCROOT=/var/www/html
-NGINX_ROOT=/etc/nginx
-NGINX_AVAIL=$NGINX_ROOT/sites-available
-NGINX_ENABL=$NGINX_ROOT/sites-enabled
 
 status="/tmp/datasync-webhead-$1.status"
 
@@ -35,15 +27,16 @@ fi
 
 echo "===== Initializing static webhead with IP $1 ====="
 
-if  ! ssh root@$WEBHEAD_IP "test -e $DOCROOT/$LIVE_DIR"; then
-	root@$WEBHEAD_IP cd $DOCROOT && ln -sv $SYNC_DIR $LIVE_DIR
+if  ! ssh root@$WEBHEAD_IP "test -e /var/www/html/live/"; then
+	ssh root@$WEBHEAD_IP "cd /var/www/html/ && ln -s /home/kelley/static_sites live"
 fi
 
-nice -n 20 /usr/bin/rsync -avilzx -e ssh $NGINX_AVAIL/ root@$1:$NGINX_AVAIL/
-nice -n 20 /usr/bin/rsync -avilzx -e ssh $NGINX_ENABL/ root@$1:$NGINX_ENABL/
- 
-ssh root@$i "systemctl condreload nginx"
-ssh root@$i "systemctl status nginx"
+nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/sites-available/ root@$WEBHEAD_IP:/etc/nginx/sites-available/
+nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/sites-enabled/ root@$WEBHEAD_IP:/etc/nginx/sites-enabled/
+nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/snippets/ root@$WEBHEAD_IP:/etc/nginx/snippets/
+
+ssh root@$WEBHEAD_IP "systemctl condreload nginx"
+ssh root@$WEBHEAD_IP "systemctl status nginx"
 
 if [ $? = "1" ]; then
 	echo "FAILURE : rsync failed. Please refer to the solution documentation " > $status
