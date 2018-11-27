@@ -1,5 +1,5 @@
 # rsyncster
-CMS -> Static site generation using standard cli utilities.
+CMS -> Static site generation using standard \*nix utilities.
 
 Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, 'cause your content is yours and should not be locked to your cloud provider.
 
@@ -16,7 +16,6 @@ Backend environment
 * Haproxy
 * Nginx
 * Apache2
-* Syncthing
 
 CMS assumptions
 * Simplified one-page interface. Bootstrap theme.
