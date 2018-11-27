@@ -1,5 +1,4 @@
 #!/bin/bash
-
 	
 if sudo ssh cloud2int "test -e /var/www/html/$1"; then
 	sudo ssh cloud2int "drush use /var/www/html/$1#default && drush cc all"

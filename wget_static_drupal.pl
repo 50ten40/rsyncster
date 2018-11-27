@@ -10,7 +10,7 @@ my @domains = $ARGV[0]; # Todo: Use changed files list at limit wget. For now, r
 
 if($ARGV[0] eq "all") { 
 	
-	open(VIRTUALS, "virt_domains.list") or die $!;
+	open(VIRTUALS, "./lib/virt_domains.list") or die $!; # Todo: Get from nginx/apache sites-enabled
 	my @domains = <VIRTUALS>;
 	close VIRTUALS;
 }

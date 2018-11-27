@@ -36,7 +36,7 @@ for i in ${webservers[@]}; do
 		PREFIX="db2.static"
 	fi
 
-	nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=/home/kelley/manage/rsync-exclusions.lst -e ssh /var/www/html/live/m.$ONEDOMAIN/ root@$i:/var/www/html/live/m.$ONEDOMAIN/
+	nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=./lib/rsync-exclusions.lst -e ssh /var/www/html/live/m.$ONEDOMAIN/ root@$i:/var/www/html/live/m.$ONEDOMAIN/
 	nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/sites-available/$PREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
 
 
