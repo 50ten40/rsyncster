@@ -2,10 +2,15 @@
 # push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
 
 webservers=(192.237.251.89 lrsint) #todo: use /etc/hosts and generate prefixes; we do not syncting due to delay on publish. eg staging->live.
-status="/tmp/datasync-rack-$1.status"
+MANAGE_DIR="/home/kelley/manage"
+timestamp() {
+        date +"%Y-%m-%d %H:%M:%S"
+}
 
-if [ -d /tmp/.one-rack-rsync.lock ]; then
-	echo "FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
+status="$MANAGE_DIR/datasync-webheads-$1.status"
+
+if [ -d /tmp/.webheads.lock ]; then
+	echo "$(timestamp) - FAILURE : rsync publish-rsync.lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
 	exit 1
 fi
 
@@ -17,18 +22,18 @@ else
         exit
 fi
 
-mkdir -v /tmp/.one-rack-rsync.lock
+mkdir -v /tmp/.webheads.lock
 
 if [ $? = "1" ]; then
-	echo "FAILURE : cannot create lock" > $status
+	echo "$(timestamp) - FAILURE : cannot create .webheads.lock" >> $status
 	exit 1
 else
-	echo "SUCCESS : created lock" > $status
+	echo "$(timestamp) - SUCCESS : created .webheads.lock" >> $status
 fi
 
 for i in ${webservers[@]}; do
 
-	echo "===== Beginning rsync of static docroot on $i ====="
+	echo "$(timestamp) - ===== Beginning rsync of static docroot on $i ====="
 
 	if ! [ $i = "192.237.251.89" ]; then
 		PREFIX="static"
@@ -36,7 +41,7 @@ for i in ${webservers[@]}; do
 		PREFIX="db2.static"
 	fi
 
-	nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=./lib/rsync-exclusions.lst -e ssh /var/www/html/live/m.$ONEDOMAIN/ root@$i:/var/www/html/live/m.$ONEDOMAIN/
+	nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$MANAGE_DIR/rsyncster/lib/rsync-exclusions.lst -e ssh /var/www/html/live/m.$ONEDOMAIN/ root@$i:/var/www/html/live/m.$ONEDOMAIN/
 	nice -n 20 /usr/bin/rsync -avilzx -e ssh /etc/nginx/sites-available/$PREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
 
 
@@ -47,13 +52,13 @@ for i in ${webservers[@]}; do
 	fi
 
 	if [ $? = "1" ]; then
-		echo "FAILURE : rsync failed. Please refer to the solution documentation " > $status
+		echo "$(timestamp) - FAILURE : rsync failed. Please refer to the solution documentation " >> $status
 		exit 1
 	fi
 
-	echo "===== Completed rsync of static docroot on $i =====";
+	echo "$(timestamp) - ===== Completed rsync of static docroot on $i =====";
 done
 
-rmdir -v /tmp/.one-rack-rsync.lock
+rmdir -v /tmp/.webheads.lock
 
-echo "SUCCESS : rsync completed successfully" > $status
+echo "$(timestamp) - SUCCESS : rsync completed successfully" >> $status

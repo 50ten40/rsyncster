@@ -2,11 +2,16 @@
 # push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
 
 webservers=(localhost) # Multiple staging locations, (your workflow may vary)
-status="/tmp/datasync-publish-$1.status"
+MANAGE_DIR="/home/kelley/manage"
+timestamp() {
+        date +"%Y-%m-%d %H:%M:%S"
+}
+
+status="$MANAGE_DIR/datasync-publish-$1.status"
 
 if [ -d /tmp/.one-publish-rsync.lock ]; then
-echo "FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
-exit 1
+	echo "$(timestamp) - FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
+	exit 1
 fi
 
 if [ $1 ]; then
@@ -20,16 +25,16 @@ fi
 mkdir -v /tmp/.one-publish-rsync.lock
 
 if [ $? = "1" ]; then
-	echo "FAILURE : cannot create lock" > $status
+	echo "$(timestamp) - FAILURE : cannot create lock" > $status
 	exit 1
 else
-	echo "SUCCESS : created lock" > $status
+	echo "$(timestamp) - SUCCESS : created lock" >> $status
 fi
 
 
 for i in ${webservers[@]}; do
 
-	echo "===== Beginning publish of static docroot on $i ====="
+	echo "$(timestamp) - ===== Beginning publish of static docroot on $i =====" >> $status
 
 	if [ $i = "localhost" ]; then
 
@@ -49,13 +54,13 @@ for i in ${webservers[@]}; do
 	fi
 
 	if [ $? = "1" ]; then
-		echo "FAILURE : rsync failed. Please refer to the solution documentation " > $status
+		echo "$(timestamp) - FAILURE : rsync failed. Please refer to the solution documentation " >> $status
 		exit 1
 	fi
 
-	echo "===== Completed publish of staging -> live for $i =====";
+	echo "$(timestamp) - ===== Completed publish of staging -> live for $i =====" >> $status
 done
 
 rmdir -v /tmp/.one-publish-rsync.lock
 
-echo "SUCCESS : rsync completed successfully" > $status
+echo "$(timestamp) - SUCCESS : rsync completed successfully" >> $status
