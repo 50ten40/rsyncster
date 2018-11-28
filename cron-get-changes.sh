@@ -60,7 +60,7 @@ aggregate_changes() {
 		if [ ! -d $WORKING_DIR/$i ] ; then
                 	mkdir $WORKING_DIR/$i
 	      	fi
-                echo " - TASK : Getting changed files listing on $i" >> $status
+                echo " - TASK : Getting changed file listing on $i" >> $status
 		scp root@$i:$WORKING_DIR/* $WORKING_DIR/$i/
 	done
 		
