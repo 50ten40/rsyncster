@@ -34,7 +34,7 @@ fi
 
 for i in ${webservers[@]}; do
 
-	echo "$(timestamp) - ===== Beginning publish of static docroot on $i =====" >> $status
+	echo "$(timestamp) - ===== Beginning publish of staging -> live on $i =====" >> $status
 
 	if [ $i = "localhost" ]; then
 
