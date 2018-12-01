@@ -13,7 +13,7 @@ Dependencies
 * Rsync
 * Sed
 * Cron
-* FInd
+* Find
 
 Backend environment 
 * Haproxy
