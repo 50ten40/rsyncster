@@ -5,7 +5,7 @@ Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, si
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
-__Status:__ 30nov2018 - Works. Calling this release candidate rsyncster_v.001_30nov2018.rc01. This solution is for those who know their web backends. It is not polished.
+__Status:__ 30nov2018 - Works. Calling this release candidate rsyncster\_v.0.9-alpha-30nov2018. This solution is for those who know their web backends. It is not polished.
 
 
 __Dependencies__
@@ -31,7 +31,7 @@ __CMS assumptions__
 __Rsyncster Installation__
 * Git clone https://github.com/50ten40/rsyncster.git to your management directory.
 * No documentation, you'll just have to read the code.
-* Usage: Call cron_get_changes.sh from cron entry. Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
+* Usage: Call cron\_get\_changes.sh from cron entry. Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
 * Configure variables for your setup.
 
 __Basic Drupal Workflow__
