@@ -16,7 +16,7 @@ fi
 
 if [ $? = "1" ]; then
 
-	echo " - TASK : SUCCESS : Existing cron process found. Starting new job." >> $status
+	echo " - TASK : TASK : Existing cron process found. Starting new job." >> $status
 	exit 1
 else
 
