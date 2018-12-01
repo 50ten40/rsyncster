@@ -5,7 +5,8 @@ Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, si
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
-Status: 30nov2018 - Works. Calling this release candidate rsyncster_v.001_30nov2018.rc01
+Status: 30nov2018 - Works. Calling this release candidate rsyncster_v.001_30nov2018.rc01. This solution is for those who know their web backends. It is not polished.
+
 
 Dependencies
 * Perl
@@ -26,6 +27,12 @@ CMS assumptions
 * No ajax or sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
+
+Rsyncster Installation
+* Git Clone (Developers can make pull request)
+* No documentation yet, you'll just have to read the code.
+* Usage: Call cron_get_changes.sh from cron entry. There are helper scripts in ./extras.
+* Configure variables for your setup.
 
 Basic Drupal Workflow
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
