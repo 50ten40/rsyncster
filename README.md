@@ -5,12 +5,15 @@ Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, si
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
+Status: 30nov2018 - Works. Calling this release candidate rsyncster-80nov2018.rc01
+
 Dependencies
 * Perl
 * Wget
 * Rsync
 * Sed
 * Cron
+* FInd
 
 Backend environment 
 * Haproxy
