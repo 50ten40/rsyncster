@@ -1,12 +1,11 @@
 # rsyncster
 CMS -> Static site generation using standard \*nix utilities.
 
-Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, 'cause your content is yours and should not be locked to your cloud provider.
+Philosophy is seven second rule. Seven seconds total to capture visitors attention. Only two seconds to stop their browsing. Avoid tl;dr. User experience is fast, clean, simple. Mobile optimized. Accessibility is important. Screen reader friendly. Open source, open cloud, 'cause your content is yours and should not be locked to your cloud provider.
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
 __Status:__ 30nov2018 - Works. Calling this release candidate rsyncster\_v.0.9-alpha-30nov2018. This solution is for those who know their web backends. It is not polished.
-
 
 __Dependencies__
 * Perl
