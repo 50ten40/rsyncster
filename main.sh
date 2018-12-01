@@ -1,19 +1,21 @@
 #!/bin/bash
 
-MANAGE_DIR="/home/kelley/manage"
-status="$MANAGE_DIR/datasync-changes.status"
-timestamp() {
-        date +"%Y-%m-%d %H:%M:%S"
-}
+LIB_PATH="$HOME/manage/rsyncster/lib"
+. $LIB_PATH/env.sh
+. $LIB_PATH/function_timestamp.sh
 
-if [ $2 ne "cron" ]; then
+if [ "$2" == "upgrade" ]; then
 
 	echo " - TASK : Starting CMS cache flush." >> $status
 	
-	if sudo ssh cloud2int "test -e /var/www/html/$1"; then
-		sudo ssh cloud2int "drush use /var/www/html/$1#default && drush cc all"
+	if sudo ssh $APP_SERVERS_MASTER "test -e $DOCROOT_DIR/$1"; then
+
+		sudo ssh cloud2int "drush use $DOCROOT_DIR/$1#default && drush cc all"
+	
 	else
-		sudo ssh cloud2int "drush use /var/www/html/kelleygraham.com/#$1 && drush cc all"
+	
+		sudo ssh cloud2int "drush use $DOCROOT_DIR/kelleygraham.com/#$1 && drush cc all"
+	
 	fi
 
 echo "$(timestamp) - SUCCESS : Completed CMS cache flush." >> $status

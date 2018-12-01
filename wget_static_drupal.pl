@@ -6,11 +6,14 @@ die("Please provide URL or \"all\" to update all static domains.\n") unless ($AR
 #$waitTime = $ARGV[1] if ($ARGV[1]);
 my $waitTime = 1;
 my $prefix = "https://m";
-my @domains = $ARGV[0]; # Todo: Use changed files list at limit wget. For now, refresh site.
+my @domains = $ARGV[0];
+my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
+my $manage_dir = '/home/kelley/manage';
+my $status = "$manage_dir/datasync-.changes.status";
 
-if($ARGV[0] eq "all") { 
+if ($ARGV[0] eq "all") { 
 	
-	open(VIRTUALS, "./lib/virt_domains.list") or die $!; # Todo: Get from nginx/apache sites-enabled
+	open(VIRTUALS, "$manage_dir/virt_domains.list") or die $!; # Todo: Get from nginx/apache sites-enabled
 	my @domains = <VIRTUALS>;
 	close VIRTUALS;
 }
@@ -18,7 +21,42 @@ if($ARGV[0] eq "all") {
 chdir('/var/www/html/staging') or die "$!";
 
 foreach (@domains) {
+
 	chomp($_);
-   	system("wget -mpk --base=$_ --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $prefix.$_");
+	
+	my $base = $_;
+	my $listicle = "$working_dir/$_/m\.$_";
+	
+	if (-e $listicle) {
+			
+		my $dir = "m\.$_";
+		chdir($dir) or die "$!";
+		
+		open(PAGES, $listicle) or die $!;
+		my @pages = <PAGES>;
+		close(PAGES);
+
+		foreach (@pages) {
+			
+			chomp($_);
+			
+			my $target = "$_";
+			system("wget -x -nH -mpk --base=$base --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $target");
+
+			my $msg = " - TASK : Processing completed for $_";
+			system("echo \"$msg\" >> $status");
+		}
+		
+		unlink($listicle);
+		
+		my $msg = " - TASK : Unlinking changes file for $_";
+                system("echo \"$msg\" >> $status");
+		
+	} else {
+
+   		system("wget -mpk --base=$base --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $prefix.$_");
+	}	
+
+	chdir('/var/www/html/staging') or die "$!";
 	system("chown -R kelley.kelley m.$_");
 }

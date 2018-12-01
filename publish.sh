@@ -1,16 +1,16 @@
 #!/bin/bash
 # push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
 
-webservers=(localhost) # Multiple staging locations, (your workflow may vary)
-MANAGE_DIR="/home/kelley/manage"
-timestamp() {
-        date +"%Y-%m-%d %H:%M:%S"
-}
+LIB_PATH="$HOME/manage/rsyncster/lib"
+. $LIB_PATH/env.sh
+. $LIB_PATH/function_timestamp.sh
 
-status="$MANAGE_DIR/datasync-publish-$1.status"
+webservers=(localhost) # Multiple staging locations, (your workflow may vary)
+
+#status="$MANAGE_DIR/datasync-$CHANGES_STRING.status"
 
 if [ -d /tmp/.one-publish-rsync.lock ]; then
-	echo "$(timestamp) - FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
+	echo "$(timestamp) - FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." >> $status
 	exit 1
 fi
 
@@ -24,8 +24,8 @@ fi
 
 mkdir -v /tmp/.one-publish-rsync.lock
 
-if [ $? = "1" ]; then
-	echo "$(timestamp) - FAILURE : cannot create lock" > $status
+if [ $? == "1" ]; then
+	echo "$(timestamp) - FAILURE : cannot create lock" >> $status
 	exit 1
 else
 	echo "$(timestamp) - SUCCESS : created lock" >> $status
@@ -36,21 +36,31 @@ for i in ${webservers[@]}; do
 
 	echo "$(timestamp) - ===== Beginning publish of staging -> live on $i =====" >> $status
 
-	if [ $i = "localhost" ]; then
+	if [ "$i" = "localhost" ]; then
 
 		nginx_conf="/etc/nginx/sites-enabled/static.$ONEDOMAIN.conf"
-	
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=/home/kelley/manage/rsync-exclusions.lst -e ssh cloud2int:/var/www/html/stockphoto.tools/sites/all/ /var/www/html/staging/m.$ONEDOMAIN/sites/all/
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before --/var/www/html/stockphoto.tools/sites/all/libraries /var/www/html/staging/m.$ONEDOMAIN/sites/all/libraries
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before /var/www/html/stockphoto.tools/sites/all/themes /var/www/html/staging/m.$ONEDOMAIN/sites/all/themes
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before /var/www/html/stockphoto.tools/sites/all/modules /var/www/html/staging/m.$ONEDOMAIN/sites/all/modules
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=/home/kelley/manage/rsync-exclusions.lst /var/www/html/staging/m.$ONEDOMAIN/ /var/www/html/live/m.$ONEDOMAIN/
+		
+		if [ "$2" == "upgrade" ]; then
+
+			echo " - TASK : Getting files for $1 from $APP_SERVERS_MASTER" >> $status
+
+			nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $APP_SERVERS_MASTER:$DOCROOT_DIR/stockphoto.tools/sites/all/ $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/
+
+			echo " - TASK : Syncing libraries for $1 on $i" >> $status
+			nice -n 20 rsync -avilzx --delete-before -- $DOCROOT_DIR/stockphoto.tools/sites/all/libraries $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/libraries
+			echo " - TASK : Syncing themes for $1 on $i" >> $status
+			nice -n 20 rsync -avilzx --delete-before $DOCROOT_DIR/stockphoto.tools/sites/all/themes $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/themes
+			echo " - TASK : Syncing modiules for $1 on $i" >> $status
+			nice -n 20 rsync -avilzx --delete-before $DOCROOT_DIR/stockphoto.tools/sites/all/modules $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/modules
+		fi
+		
+		nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst $DOCROOT_DIR/staging/m.$ONEDOMAIN/ $DOCROOT_DIR/live/m.$ONEDOMAIN/
 	
 		if [ ! -f "$nginx_conf" ]; then
 			cd /etc/nginx/sites-enabled && sudo ln -s ../sites-available/static.$ONEDOMAIN.conf && systemctl reload nginx.service
 		fi
 	else
-		nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=/home/kelley/manage/rsync-exclusions.lst -e ssh /var/www/html/staging/m.$ONEDOMAIN/ root@$i:/var/www/html/live/m.$ONEDOMAIN/
+		nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/staging/m.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/m.$ONEDOMAIN/
 	fi
 
 	if [ $? = "1" ]; then
@@ -58,9 +68,9 @@ for i in ${webservers[@]}; do
 		exit 1
 	fi
 
-	echo "$(timestamp) - ===== Completed publish of staging -> live for $i =====" >> $status
+	echo " - TASK : ===== Completed publish of staging -> live for $i =====" >> $status
 done
 
 rmdir -v /tmp/.one-publish-rsync.lock
 
-echo "$(timestamp) - SUCCESS : rsync completed successfully" >> $status
+echo "$(timestamp) - SUCCESS : rsync publush completed successfully" >> $status
