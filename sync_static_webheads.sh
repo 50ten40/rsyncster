@@ -9,8 +9,8 @@ webservers=(192.237.251.89 lrsint) #todo: use /etc/hosts and generate prefixes; 
 
 #status="$MANAGE_DIR/datasync-webheads-$1.status"
 
-if [ -d /tmp/.webheads.lock ]; then
-	echo "$(timestamp) - FAILURE : rsync publish-rsync.lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." > $status
+if [ -d /tmp/.webheads.$1.lock ]; then
+	echo " - TASK : lock exists : Continuing sync of $1" >> $status
 	exit 1
 fi
 
@@ -22,7 +22,7 @@ else
         exit
 fi
 
-mkdir /tmp/.webheads.lock
+mkdir /tmp/.webheads.$1.lock
 
 if [ $? = "1" ]; then
 
@@ -31,7 +31,7 @@ if [ $? = "1" ]; then
 
 else
 
-	echo " - SUCCESS : created .webheads.lock" >> $status
+	echo " - SUCCESS : created sync webheads.lock" >> $status
 
 fi
 
@@ -66,6 +66,6 @@ for i in ${webservers[@]}; do
 	echo " - TASK : ===== Completed rsync push of static content to $i =====" >> $status
 done
 
-rmdir /tmp/.webheads.lock
+rmdir /tmp/.webheads.$1.lock
 
-echo "$(timestamp) - SUCCESS : removed .webheads.lock successfully" >> $status
+echo "$(timestamp) - SUCCESS : removed sync webheads.lock" >> $status

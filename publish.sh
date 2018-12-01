@@ -9,9 +9,8 @@ webservers=(localhost) # Multiple staging locations, (your workflow may vary)
 
 #status="$MANAGE_DIR/datasync-$CHANGES_STRING.status"
 
-if [ -d /tmp/.one-publish-rsync.lock ]; then
-	echo "$(timestamp) - FAILURE : rsync lock exists : Perhaps there is a lot of new data to push to front end web servers. Will retry soon." >> $status
-	exit 1
+if [ -d /tmp/.one-publish-rsync.$1.lock ]; then
+	echo " - TASK : rsync lock exists : Continuing publish." >> $status
 fi
 
 if [ $1 ]; then
@@ -22,7 +21,7 @@ else
         exit
 fi
 
-mkdir -v /tmp/.one-publish-rsync.lock
+mkdir -v /tmp/.one-publish-rsync.$1.lock
 
 if [ $? == "1" ]; then
 	echo "$(timestamp) - FAILURE : cannot create lock" >> $status
@@ -71,6 +70,6 @@ for i in ${webservers[@]}; do
 	echo " - TASK : ===== Completed publish of staging -> live for $i =====" >> $status
 done
 
-rmdir -v /tmp/.one-publish-rsync.lock
+rmdir -v /tmp/.one-publish-rsync.$1.lock
 
-echo "$(timestamp) - SUCCESS : rsync publush completed successfully" >> $status
+echo "$(timestamp) - SUCCESS : rsync publish completed successfully" >> $status
