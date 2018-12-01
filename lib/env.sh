@@ -4,7 +4,7 @@
 PREFIX="m" # Subdomain name for CMS.
 CHANGES_STRING=".changes" # Identifying string used in various contexts. 
 DOCROOT_DIR="/var/www/html"
-MANAGE_DIR="/home/kelley/manage"
+MANAGE_DIR="$HOME/manage"
 WORKING_DIR="$DOCROOT_DIR/$CHANGES_STRING"
 PAGES_FILE="pages.lst"
 DOMAINS_FILE="$DOCROOT_DIR/$CHANGES_STRING/domains.lst"
