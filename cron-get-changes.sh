@@ -64,8 +64,7 @@ sync
 
 if [ $? = "1" ]; then
 
-        echo "$(timestamp) - FAILURE : cannot delete $CHANGES_STRING.lock" >> $status
-        exit 1
+        echo " - TASK : still processing changes" >> $status
 
 else
 
