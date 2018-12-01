@@ -29,9 +29,9 @@ __CMS assumptions__
 * Public facing assets are obsessively lean and easily consumed.
 
 __Rsyncster Installation__
-* Git clone https://github.com/50ten40/rsyncster.git to your management directory. (Developers can make pull request)
+* Git clone https://github.com/50ten40/rsyncster.git to your management directory.
 * No documentation, you'll just have to read the code.
-* Usage: Call cron_get_changes.sh from cron entry. There are helper scripts in ./extras.
+* Usage: Call cron_get_changes.sh from cron entry. Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
 * Configure variables for your setup.
 
 __Basic Drupal Workflow__
