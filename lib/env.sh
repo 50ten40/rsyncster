@@ -1,9 +1,9 @@
 #!/bin/sh
 
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Todo: Use for sanity checks.
-PREFIX="m" # Subdomain name for CMS.
+PREFIX="m" # Subdomain DNS prefix for CMS.
 CHANGES_STRING=".changes" # Identifying string used in various contexts. 
-DOCROOT_DIR="/var/www/html"
+DOCROOT_DIR="/var/www/html" 
 MANAGE_DIR="$HOME/manage"
 WORKING_DIR="$DOCROOT_DIR/$CHANGES_STRING"
 PAGES_FILE="pages.lst"
