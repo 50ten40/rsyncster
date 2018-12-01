@@ -5,10 +5,10 @@ Philosophy is seven second rule. Avoid tl;dr. User experience is fast, clean, si
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
-Status: 30nov2018 - Works. Calling this release candidate rsyncster_v.001_30nov2018.rc01. This solution is for those who know their web backends. It is not polished.
+__Status:__ 30nov2018 - Works. Calling this release candidate rsyncster_v.001_30nov2018.rc01. This solution is for those who know their web backends. It is not polished.
 
 
-Dependencies
+__Dependencies__
 * Perl
 * Wget
 * Rsync
@@ -16,25 +16,25 @@ Dependencies
 * Cron
 * Find
 
-Backend environment 
+__Backend environment__
 * Haproxy
 * Nginx
 * Apache2
 
-CMS assumptions
+__CMS assumptions__
 * Simplified one-page interface. Bootstrap theme.
 * Mobile emphasis. No menus, mobile users can't see, don't use.
 * No ajax or sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
 
-Rsyncster Installation
+__Rsyncster Installation__
 * Git Clone (Developers can make pull request)
 * No documentation yet, you'll just have to read the code.
 * Usage: Call cron_get_changes.sh from cron entry. There are helper scripts in ./extras.
 * Configure variables for your setup.
 
-Basic Drupal Workflow
+__Basic Drupal Workflow__
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
 * Update $base_url in settings.php (required)
 * Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
