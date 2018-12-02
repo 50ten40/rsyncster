@@ -18,6 +18,7 @@ __Dependencies__
 __Backend environment__
 * Haproxy
 * Nginx
+* Apache2 ( no config support )
 
 __CMS assumptions__
 * Simplified one-page interface. Bootstrap theme.
