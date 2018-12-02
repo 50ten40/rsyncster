@@ -5,7 +5,7 @@ Philosophy is seven second rule. Seven seconds total to capture visitors attenti
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
-__Status:__ 2dec2018 - Works. Pre-release version __rsyncster\_v.0.9.0.2-alpha-30nov2018__. First pass on synchronous downloads. This version is for those who know their web backends. It is not polished.
+__Status:__ 01dec2018 - Works. Pre-release version __rsyncster\_v.0.9.0.2-alpha-01dec2018__. First pass on synchronous downloads. This version is for those who know their web backends. It is not polished.
 
 __Dependencies__
 * Perl
