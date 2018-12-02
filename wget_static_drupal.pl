@@ -9,7 +9,8 @@ my $prefix = "https://m";
 my @domains = $ARGV[0];
 my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
 my $manage_dir = '/home/kelley/manage';
-my $status = "$manage_dir/datasync-.changes.status";
+my $log_dir = "$manage_dir/rsyncster-logs";
+my $status = "$log_dir/datasync-.changes.status";
 
 if ($ARGV[0] eq "all") { 
 	
@@ -24,7 +25,7 @@ foreach (@domains) {
 
 	chomp($_);
 	
-	my $base = $_;
+	my $base = "$_";
 	my $listicle = "$working_dir/$_/m\.$_";
 	
 	if (-e $listicle) {
@@ -40,6 +41,9 @@ foreach (@domains) {
 			
 			chomp($_);
 			
+			my $msg = " - TASK : Processing started for $_";
+                        system("echo \"$msg\" >> $status");
+
 			my $target = "$_";
 			system("wget -x -nH -mpk --base=$base --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $target");
 

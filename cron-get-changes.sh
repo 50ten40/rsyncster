@@ -16,10 +16,16 @@ fi
 
 if [ $? = "1" ]; then
 
-	echo " - TASK : TASK : Existing cron process found. Starting new job." >> $status
-	exit 1
+	echo "$(timestamp) - FAILURE : unable to create $CHANGES_STRING.lock" >> $status
+	
 else
 
+	if [ ! -d $LOG_DIR ]; then
+
+        	/bin/mkdir $LOG_DIR
+
+	fi
+	
 	echo "$(timestamp) - SUCCESS : created $CHANGES_STRING.lock" > $status
 
 fi
@@ -43,7 +49,7 @@ if [ -f $DOMAINS_FILE ] && [ ! -s $DOMAINS_FILE ] ; then
 	
 	if [ $? = "1" ]; then
 
-        	echo "$(timestamp) - FAILURE : cannot delete $CHANGES_STRING.lock" >> $status
+        	echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
         	exit 1
 	
 	else
@@ -54,7 +60,7 @@ if [ -f $DOMAINS_FILE ] && [ ! -s $DOMAINS_FILE ] ; then
 
 else 
 
-	echo "$(timestamp) - SUCCESS : Syncing changes" >> $status
+	echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
 
 fi
 
@@ -64,7 +70,7 @@ sync
 
 if [ $? = "1" ]; then
 
-        echo " - TASK : still processing changes" >> $status
+        echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
 
 else
 
