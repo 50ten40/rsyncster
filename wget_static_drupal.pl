@@ -9,7 +9,7 @@ my $prefix = "https://m";
 my @domains = $ARGV[0];
 my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
 my $manage_dir = '/home/kelley/manage';
-my $log_dir = "$manage_dir/rsyncster-logs";
+my $log_dir = "/var/log/rsyncster";
 my $status = "$log_dir/datasync-.changes.status";
 
 if ($ARGV[0] eq "all") { 
