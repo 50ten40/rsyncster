@@ -28,7 +28,7 @@ foreach (@domains) {
 	my $base = "$_";
 	my $listicle = "$working_dir/$_/m\.$_";
 	
-	if (-e $listicle) {
+	if (-s $listicle) {
 			
 		my $dir = "m\.$_";
 		chdir($dir) or die "$!";
@@ -41,24 +41,35 @@ foreach (@domains) {
 			
 			chomp($_);
 			
-			my $msg = " - TASK : Processing started for $_";
+			my $msg = " - TASK : Fetching $_";
                         system("echo \"$msg\" >> $status");
 
 			my $target = "$_";
-			system("wget -x -nH -mpk --base=$base --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $target");
+			system("wget -x -nH -mpk --base=$base --exclude-directories=/user,/admin,/civicrm --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $target");
+			
+			my $msg = " - TASK : Fetch completed for $_";
+                        system("echo \"$msg\" >> $status");
+	
+			open(PAGES, $listicle) or die $!;
+                	my @pages = <PAGES>;
+			foreach my $line ( @pages ) { 
+        			print {PAGES} $line unless ( $line =~ /$_/ ); 
+    			}
+			close(PAGES);
 
-			my $msg = " - TASK : Processing completed for $_";
-			system("echo \"$msg\" >> $status");
+			my $msg = " - TASK : Removed listicle entry $_";
+                        system("echo \"$msg\" >> $status");			
+		
 		}
 		
-		unlink($listicle);
+		#unlink($listicle);
 		
-		my $msg = " - TASK : Unlinking changes file for $_";
-                system("echo \"$msg\" >> $status");
+		#my $msg = " - TASK : Unlinking changes file for $_";
+                #system("echo \"$msg\" >> $status");
 		
 	} else {
 
-   		system("wget -mpk --base=$base --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $prefix.$_");
+   		system("wget -mpk --base=$base --exclude-directories=/user,/admin,/civicrm --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $prefix.$_");
 	}	
 
 	chdir('/var/www/html/staging') or die "$!";
