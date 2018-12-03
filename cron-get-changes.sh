@@ -62,18 +62,17 @@ else
 
 	echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
 
-fi
+	sync
 
-sync
+	/bin/rmdir /tmp/$CHANGES_STRING.lock
 
-/bin/rmdir /tmp/$CHANGES_STRING.lock
+	if [ $? = "1" ]; then
 
-if [ $? = "1" ]; then
+        	echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
 
-        echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
+	else
 
-else
+        	echo "$(timestamp) - SUCCESS : deleted $CHANGES_STRING.lock" >> $status
 
-        echo "$(timestamp) - SUCCESS : deleted $CHANGES_STRING.lock" >> $status
-
+	fi
 fi
