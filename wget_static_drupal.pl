@@ -10,6 +10,7 @@ my @domains = $ARGV[0];
 my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
 my $manage_dir = '/home/kelley/manage';
 my $log_dir = "/var/log/rsyncster";
+my $web_user = "kelley";
 my $status = "$log_dir/datasync-.changes.status";
 
 if ($ARGV[0] eq "all") { 
@@ -52,8 +53,8 @@ foreach (@domains) {
 	
 			open(PAGES, $listicle) or die $!;
                 	my @pages = <PAGES>;
-			foreach my $line ( @pages ) { 
-        			print {PAGES} $line unless ( $line =~ /$_/ ); 
+			foreach my $line (@pages) { 
+        			print {PAGES} $line unless ($line =~ /$_/); 
     			}
 			close(PAGES);
 
@@ -62,8 +63,11 @@ foreach (@domains) {
 		
 		}
 		
-		#unlink($listicle);
-		
+		if (-z $listicle) {
+			unlink($listicle);
+		}
+
+
 		#my $msg = " - TASK : Unlinking changes file for $_";
                 #system("echo \"$msg\" >> $status");
 		
@@ -73,5 +77,5 @@ foreach (@domains) {
 	}	
 
 	chdir('/var/www/html/staging') or die "$!";
-	system("chown -R kelley.kelley m.$_");
+	system("chown -R $web_user.$web_user m.$_");
 }
