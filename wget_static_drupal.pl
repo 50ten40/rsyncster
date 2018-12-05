@@ -3,14 +3,23 @@
 #wget.pl "<URL(s)>" [wait]
 
 die("Please provide URL or \"all\" to update all static domains.\n") unless ($ARGV[0]);
-#$waitTime = $ARGV[1] if ($ARGV[1]);
-my $waitTime = 1;
-my $prefix = "https://m";
+
+if ($ARG[2]) {
+	my $waitTime = "--wait $ARGV[2]"; 
+} else { 
+	my $waitTime = "";
+}
+
+my $scheme = "https://";
+my $load_balancer = "lbint";
+my $sub_domain = "m";
+my $prefix = "$scheme"."$load_balancer";
 my @domains = $ARGV[0];
 my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
 my $manage_dir = '/home/kelley/manage';
 my $log_dir = "/var/log/rsyncster";
 my $web_user = "kelley";
+my $exclude_list = '/admin,/user,/civicrm';
 my $status = "$log_dir/datasync-.changes.status";
 
 if ($ARGV[0] eq "all") { 
@@ -26,12 +35,13 @@ foreach (@domains) {
 
 	chomp($_);
 	
-	my $base = "$_";
-	my $listicle = "$working_dir/$_/m\.$_";
+	my $host = "$_";
+	my $URL = "$scheme"."$load_balancer\.$host";
+	my $listicle = "$working_dir/$_\.$sub_domain\.$_";
 	
-	if (-s $listicle) {
+	if (-s $listicle > 3) {
 			
-		my $dir = "m\.$_";
+		my $dir = "$sub_domain\.$_";
 		chdir($dir) or die "$!";
 		
 		open(PAGES, $listicle) or die $!;
@@ -46,15 +56,15 @@ foreach (@domains) {
                         system("echo \"$msg\" >> $status");
 
 			my $target = "$_";
-			system("wget -x -nH -mpk --base=$base --exclude-directories=/user,/admin,/civicrm --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $target");
+			system("wget -x -nH -mpk --base=$host -l 1 --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $target");
 			
 			my $msg = " - TASK : Fetch completed for $_";
                         system("echo \"$msg\" >> $status");
 	
-			open(PAGES, $listicle) or die $!;
+			open(PAGES,"+< $listicle") or die $!;
                 	my @pages = <PAGES>;
 			foreach my $line (@pages) { 
-        			print {PAGES} $line unless ($line =~ /$_/); 
+        			print {PAGES} $line unless (chomp($line) =~ /$_/); 
     			}
 			close(PAGES);
 
@@ -73,9 +83,15 @@ foreach (@domains) {
 		
 	} else {
 
-   		system("wget -mpk --base=$base --exclude-directories=/user,/admin,/civicrm --user-agent=\"\" --restrict-file-names=windows -e robots=off --wait $waitTime $prefix.$_");
+		my $dir = "$sub_domain\.$_";
+                chdir($dir) or die "$!";
+		
+		my $msg = " - TASK : Fetching files from $host";
+                        system("echo \"$msg\" >> $status");
+
+   		system("wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
 	}	
 
 	chdir('/var/www/html/staging') or die "$!";
-	system("chown -R $web_user.$web_user m.$_");
+	system("chown -R $web_user.$web_user $sub_domain\.$host");
 }
