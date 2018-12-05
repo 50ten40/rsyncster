@@ -33,12 +33,21 @@ aggregate_changes() {
 
         for d in "${MAPFILE[@]}"; do
 
+
                 if [ ! -d $WORKING_DIR/$d ] ; then
                         mkdir $WORKING_DIR/$d
                 fi
+		
+		if [ ! -s $WORKING_DIR/$d/m.$d ] ; then
+		
+                	find $WORKING_DIR/$APP_SERVERS_SHORTNAME*/ -name $PREFIX.$d -print0 | xargs -0 -I file cat file > /tmp/$CHANGES_STRING.$PREFIX.$d
+                	sort /tmp/$CHANGES_STRING.$PREFIX.$d -u > $WORKING_DIR/$d/$PREFIX.$d
 
-                find $WORKING_DIR/$APP_SERVERS_SHORTNAME*/ -name $PREFIX.$d -print0 | xargs -0 -I file cat file > /tmp/$CHANGES_STRING.$PREFIX.$d
-                sort /tmp/$CHANGES_STRING.$PREFIX.$d -u > $WORKING_DIR/$d/$PREFIX.$d
+		else 
+
+			echo " - TASK : Still processing changes list for $d" >> $status
+
+		fi
         done
 }
 
