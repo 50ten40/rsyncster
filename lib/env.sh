@@ -2,6 +2,7 @@
 
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Use for sanity checks.
 PREFIX="m" # Subdomain DNS prefix for CMS.
+LOAD_BALANCER="lbint" # Where to point wget. See wait_time wget option.
 CHANGES_STRING=".changes" # Identifying string used in various contexts. Dotfile.
 MANAGE_STRING="manage" # Identifying string for workspace subdirectory. Optional, leave blank if you cloned into your home directory.
 DOCROOT_DIR="/var/www/html"
@@ -16,3 +17,4 @@ LIB_DIR="$MANAGE_DIR/rsyncster/lib"
 LOG_DIR="/var/log/rsyncster"
 status="$LOG_DIR/datasync-$CHANGES_STRING.status"
 exclusions="$LIB_DIR/exclusions.lst"
+wait_time="" # Passed to wget to manage server load during fetch.
