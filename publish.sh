@@ -49,7 +49,7 @@ for i in ${webservers[@]}; do
 			nice -n 20 rsync -avilzx --delete-before -- $DOCROOT_DIR/stockphoto.tools/sites/all/libraries $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/libraries
 			echo " - TASK : Syncing themes for $1 on $i" >> $status
 			nice -n 20 rsync -avilzx --delete-before $DOCROOT_DIR/stockphoto.tools/sites/all/themes $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/themes
-			echo " - TASK : Syncing modiules for $1 on $i" >> $status
+			echo " - TASK : Syncing modules for $1 on $i" >> $status
 			nice -n 20 rsync -avilzx --delete-before $DOCROOT_DIR/stockphoto.tools/sites/all/modules $DOCROOT_DIR/staging/m.$ONEDOMAIN/sites/all/modules
 		fi
 		
