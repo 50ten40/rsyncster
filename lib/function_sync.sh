@@ -23,7 +23,7 @@ sync() {
 
                 START_TIME=`echo $(($(date +%s%N/1000000000)))`
                 
-		$RSYNCSTER_SCRIPT $i cron
+		$RSYNCSTER_SCRIPT $i upgrade #cron individual pages listicle feature broke for now.
                 
 		END_TIME=`echo $(($(date +%s%N/1000000000)))`
                 ELAPSED_TIME=$(($END_TIME - $START_TIME))
