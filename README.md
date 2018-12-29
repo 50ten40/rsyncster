@@ -42,4 +42,4 @@ __Basic Drupal Workflow__
 * Verify custom logos and favicon. Set in theme and global settings.(optional)
 * Update scripts with your subdomain
 * Run scripts as needed
-* Enjoy your new peace of mind.
+* Enjoy!
