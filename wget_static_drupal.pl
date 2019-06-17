@@ -20,6 +20,7 @@ my $manage_dir = '/home/kelley/manage';
 my $log_dir = "/var/log/rsyncster";
 my $web_user = "kelley";
 my $exclude_list = '/admin,/user,/civicrm';
+my $domains_list = "$working_dir/domains.lst";
 my $status = "$log_dir/datasync-.changes.status";
 
 if ($ARGV[0] eq "all") { 
@@ -90,7 +91,14 @@ foreach (@domains) {
                         system("echo \"$msg\" >> $status");
 
    		system("wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
-	}	
+		open(DOMS,"+< $domains_list") or die $!;
+                        my @doms = <DOMS>;
+                        foreach my $line (@doms) {
+                                print {DOMS} $line unless (chomp($line) =~ /$_/);
+                        }
+                close(DOMS);
+
+	}
 
 	chdir('/var/www/html/staging') or die "$!";
 	system("chown -R $web_user.$web_user $sub_domain\.$host");

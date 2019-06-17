@@ -10,23 +10,20 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 
 if [ ! -d /tmp/$CHANGES_STRING.lock ]; then
 
-	/bin/mkdir /tmp/$CHANGES_STRING.lock
+   /bin/mkdir /tmp/$CHANGES_STRING.lock
 
 fi
 
 if [ $? = "1" ]; then
 
-	echo "$(timestamp) - FAILURE : unable to create $CHANGES_STRING.lock" >> $status
-	
+   echo "$(timestamp) - FAILURE : unable to create $CHANGES_STRING.lock" >> $status	
+
 else
 
-	if [ ! -d $LOG_DIR ]; then
-
-        	/bin/mkdir $LOG_DIR
-
-	fi
-	
-	echo "$(timestamp) - SUCCESS : created $CHANGES_STRING.lock" > $status
+   if [ ! -d $LOG_DIR ]; then
+      /bin/mkdir $LOG_DIR
+   fi
+   echo "$(timestamp) - SUCCESS : created $CHANGES_STRING.lock" > $status
 
 fi
 
@@ -34,45 +31,43 @@ aggregate_changes
 
 if [ -d /tmp/$CHANGES_STRING.lock ]; then
 
-	echo " - TASK : Updating merged changes list in local path $WORKING_DIR" >> $status
+   echo " - TASK : Updating merged changes list in local path $WORKING_DIR" >> $status
 
 else
 
-	echo " - TASK : Getting merged changes list in local path $WORKING_DIR" >> $status
+   echo " - TASK : Getting merged changes list in local path $WORKING_DIR" >> $status
+
 fi
 
-if [ -f $DOMAINS_FILE ] && [ ! -s $DOMAINS_FILE ] ; then
-	
-	echo "$(timestamp) - SUCCESS : No changes, exiting" >> $status
-	
-	/bin/rmdir /tmp/$CHANGES_STRING.lock
-	
-	if [ $? = "1" ]; then
+if [ -f $DOMAINS_FILE ] && [ ! -s $DOMAINS_FILE ] ; then	
 
-        	echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
-        	exit 1
+   echo "$(timestamp) - FUNCTION : No changes, exiting" >> $status	
+   /bin/rmdir /tmp/$CHANGES_STRING.lock
 	
-	else
+   if [ $? = "1" ]; then
+
+      echo "$(timestamp) - FAILURE : Unable to delete $CHANGES_STRING.lock" >> $status
+      exit 1
+	
+   else
         
-		echo "$(timestamp) - SUCCESS : deleted $CHANGES_STRING.lock" >> $status
-		exit 1
-	fi
+      echo "$(timestamp) - SUCCESS : Deleted $CHANGES_STRING.lock" >> $status
+      exit 1
+fi
 
 else 
 
-	echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
+   echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
+   sync
+   /bin/rmdir /tmp/$CHANGES_STRING.lock
+   
+   if [ $? = "1" ]; then
 
-	sync
+      echo "$(timestamp) - FAILURE : Unable to delete $CHANGES_STRING.lock" >> $status
 
-	/bin/rmdir /tmp/$CHANGES_STRING.lock
+   else
 
-	if [ $? = "1" ]; then
+      echo "$(timestamp) - SUCCESS : Deleted $CHANGES_STRING.lock" >> $status
 
-        	echo "$(timestamp) - FAILURE : unable to delete $CHANGES_STRING.lock" >> $status
-
-	else
-
-        	echo "$(timestamp) - SUCCESS : deleted $CHANGES_STRING.lock" >> $status
-
-	fi
+   fi
 fi

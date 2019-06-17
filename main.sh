@@ -6,19 +6,19 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 
 if [ "$2" == "upgrade" ]; then
 
-	echo " - TASK : Starting CMS cache flush." >> $status
+   echo "$(timestamp) - TASK : Starting CMS cache flush." >> $status
 	
-	if sudo ssh $APP_SERVERS_MASTER "test -e $DOCROOT_DIR/$1"; then
+   if sudo ssh $APP_SERVERS_MASTER "test -e $DOCROOT_DIR/$1"; then
 
-		sudo ssh cloud2int "drush use $DOCROOT_DIR/$1#default && drush cc all"
+      sudo ssh cloud2int "drush use $DOCROOT_DIR/$1#default && drush cc all"
 	
-	else
+   else
 	
-		sudo ssh cloud2int "drush use $DOCROOT_DIR/kelleygraham.com/#$1 && drush cc all"
+      sudo ssh cloud2int "drush use $DOCROOT_DIR/kelleygraham.com/#$1 && drush cc all"
 	
-	fi
+   fi
 
-echo "$(timestamp) - SUCCESS : Completed CMS cache flush." >> $status
+   echo "$(timestamp) - SUCCESS : Completed CMS cache flush." >> $status
 
 fi
 
