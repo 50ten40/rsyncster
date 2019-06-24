@@ -2,6 +2,8 @@
 #Usage:
 #wget.pl "<URL(s)>" [wait]
 
+
+
 die("Please provide URL or \"all\" to update all static domains.\n") unless ($ARGV[0]);
 
 if ($ARG[2]) {
@@ -15,11 +17,11 @@ my $load_balancer = "lbint";
 my $sub_domain = "m";
 my $prefix = "$scheme"."$load_balancer";
 my @domains = $ARGV[0];
-my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib
+my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib/.env.sh
 my $manage_dir = '/home/kelley/manage';
 my $log_dir = "/var/log/rsyncster";
 my $web_user = "kelley";
-my $exclude_list = '/admin,/civicrm';
+my $exclude_list = '/admin,/civicrm,/user,/contact';
 my $domains_list = "$working_dir/domains.lst";
 my $status = "$log_dir/datasync-.changes.status";
 

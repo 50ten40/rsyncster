@@ -5,7 +5,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(localhost) # Multiple staging locations, (your workflow may vary)
+webservers=(localhost) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
 
 #status="$MANAGE_DIR/datasync-$CHANGES_STRING.status"
 
@@ -46,7 +46,7 @@ for i in ${webservers[@]}; do
 
    if [ "$i" = "localhost" ]; then
       
-      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
       
       nginx_conf="/etc/nginx/sites-enabled/static.$ONEDOMAIN.conf"
 
@@ -58,7 +58,7 @@ for i in ${webservers[@]}; do
 
    else
 
-      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst -e ssh $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
 
    fi
 

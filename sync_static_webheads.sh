@@ -5,7 +5,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(192.237.251.89 lrsint) #todo: use /etc/hosts and generate prefixes; we do not syncting due to delay on publish. eg staging->live.
+webservers=(192.237.251.89) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
 
 #status="$MANAGE_DIR/datasync-webheads-$1.status"
 
@@ -54,7 +54,7 @@ for i in ${webservers[@]}; do
 
       fi
 
-      nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+      nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
 
       if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then
 
