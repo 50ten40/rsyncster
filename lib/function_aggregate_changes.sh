@@ -2,52 +2,72 @@
 
 aggregate_changes() {
 
-        rm /tmp/$CHANGES_STRING.lst
+   echo "$(timestamp) - FUNCTION - Starting aggregate_changes" >> $status
+   rm /tmp/$CHANGES_STRING.lst # cleanup
 
-        for i in $APP_SERVERS; do
-                echo " - TASK : Getting domains list on $i" >> $status
+   for i in $APP_SERVERS; do
+   
+      echo " - TASK : Getting changed domains list from $i" >> $status
+      ssh root@$i "find $WORKING_DIR/ -maxdepth 1 -printf \"%f\n\"" >> /tmp/$CHANGES_STRING.lst
 
-                ssh root@$i "find $WORKING_DIR/ -maxdepth 1 -printf \"%f\n\"" >> /tmp/$CHANGES_STRING.lst
+   done
 
-        done
+   echo " - TASK : Aggregating changed domains list" >> $status
 
-        if [ ! -d $WORKING_DIR ] ; then
-                mkdir $WORKING_DIR
-        fi
+   if [ ! -d $WORKING_DIR ] ; then
+      mkdir $WORKING_DIR
+   fi
 
-        sed -i s/^$PREFIX\.//g /tmp/$CHANGES_STRING.lst
-        sort /tmp/$CHANGES_STRING.lst -u > $DOMAINS_FILE
-        sed -i s/"$CHANGES_STRING\/"/""/g $DOMAINS_FILE
-        sed -i /^$/d $DOMAINS_FILE
+   sed -i s/^$PREFIX\.//g /tmp/$CHANGES_STRING.lst
+   sort /tmp/$CHANGES_STRING.lst -u > $DOMAINS_FILE
+   sed -i s/"$CHANGES_STRING\/"/""/g $DOMAINS_FILE
+   sed -i /^$/d $DOMAINS_FILE
 
-        for i in $APP_SERVERS; do
+   for i in $APP_SERVERS; do
 
-                if [ ! -d $WORKING_DIR/$i ] ; then
-                        mkdir $WORKING_DIR/$i
-                fi
-                echo " - TASK : Getting changed file listing on $i" >> $status
-                scp root@$i:$WORKING_DIR/* $WORKING_DIR/$i/
-        done
+      if [ ! -d $WORKING_DIR/$i ] ; then
 
-        mapfile -t <$DOMAINS_FILE
+         echo " - TASK : Creating local working directories for $i" >> $status
+         mkdir $WORKING_DIR/$i
 
-        for d in "${MAPFILE[@]}"; do
+      fi
 
+      echo " - TASK : Getting pages list from $i" >> $status
+      scp -p root@$i:$WORKING_DIR/* $WORKING_DIR/$i/
 
-                if [ ! -d $WORKING_DIR/$d ] ; then
-                        mkdir $WORKING_DIR/$d
-                fi
+   done
+
+   mapfile -t <$DOMAINS_FILE
+
+   for d in "${MAPFILE[@]}"; do
+
+      if [ ! -d $WORKING_DIR/$d ] ; then
+      
+         mkdir $WORKING_DIR/$d
+      fi
 		
-		if [ ! -s $WORKING_DIR/$d/m.$d ] ; then
+      if [ ! -s $WORKING_DIR/$d/$PREFIX.$d ] ; then
 		
-                	find $WORKING_DIR/$APP_SERVERS_SHORTNAME*/ -name $PREFIX.$d -print0 | xargs -0 -I file cat file > /tmp/$CHANGES_STRING.$PREFIX.$d
-                	sort /tmp/$CHANGES_STRING.$PREFIX.$d -u > $WORKING_DIR/$d/$PREFIX.$d
+         find $WORKING_DIR/$APP_SERVERS_SHORTNAME*/ -name $PREFIX.$d -print0 | xargs -0 -I file cat file > /tmp/$CHANGES_STRING.$PREFIX.$d
+         sort /tmp/$CHANGES_STRING.$PREFIX.$d -u > $WORKING_DIR/$d/$PREFIX.$d
 
-		else 
+         for a in $APP_SERVERS; do
 
-			echo " - TASK : Still processing changes list for $d" >> $status
+            echo " - TASK : Clearing remote changes $d from $a" >> $status
+            
+            if ! [ root@$a:$WORKING_DIR/$d -nt $WORKING_DIR/$a/$d ] ; then
+              
+                 ssh root@$a "cd $WORKING_DIR/ && rm -rf $d"
+            
+            fi
 
-		fi
-        done
+         done
+	
+      else 
+
+         echo " - TASK : Still processing pages for $d. Update deferred. Change cron frequency?" >> $status # Comment this message.
+
+      fi
+   done
 }
 
