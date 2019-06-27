@@ -21,11 +21,7 @@ my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib/.env.sh
 my $manage_dir = '/home/kelley/manage';
 my $log_dir = "/var/log/rsyncster";
 my $web_user = "kelley";
-<<<<<<< HEAD
 my $exclude_list = '/admin,/civicrm,/user,/contact';
-=======
-my $exclude_list = '/admin,/user,/civicrm';
->>>>>>> 38cb671247714a877a909ce7a17d6aab66bb1f23
 my $domains_list = "$working_dir/domains.lst";
 my $status = "$log_dir/datasync-.changes.status";
 

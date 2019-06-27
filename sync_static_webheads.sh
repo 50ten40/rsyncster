@@ -45,7 +45,7 @@ fi
 if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
    
 
-    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $drupalfiles =====" >> $status
+    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $ONEDOMAIN =====" >> $status
     nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
 
     if [ $? = "1" ]; then

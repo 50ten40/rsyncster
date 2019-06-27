@@ -10,11 +10,11 @@ if [ "$2" == "upgrade" ]; then
 	
    if sudo ssh $APP_SERVERS_MASTER "test -e $DOCROOT_DIR/$1"; then
 
-      sudo ssh cloud2int "drush use $DOCROOT_DIR/$1#default && drush cc all"
+      sudo ssh $APP_SERVERS_MASTER "drush use $DOCROOT_DIR/$1#default && drush cc all"
 	
    else
 	
-      sudo ssh cloud2int "drush use $DOCROOT_DIR/kelleygraham.com/#$1 && drush cc all"
+      sudo ssh $APP_SERVERS_MASTER "drush use $DOCROOT_DIR/kelleygraham.com/#$1 && drush cc all"
 	
    fi
 
