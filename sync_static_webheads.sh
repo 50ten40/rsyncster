@@ -7,7 +7,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 
 webservers=(192.237.251.89 lrsint) #todo: use /etc/hosts and generate prefixes; we do not syncting due to delay on publish. eg staging->live.
 
-ssh cloud2int cd /var/www/html/kelleygraham.com/sites && shopt -s dotglob && shopt -s nullglob && drupalfiles=(*/)
+drupal_files_list=($(ssh cloud2int 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
 
 #status="$MANAGE_DIR/datasync-webheads-$1.status"
 
@@ -42,7 +42,21 @@ else
 
 fi
 
+if $ONEDOMAIN in $(drupal_files_list[@]; then
 
+    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $drupalfiles =====" >> $status
+    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$drupalfiles $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+
+    if [ $? = "1" ]; then
+
+      echo "$(timestamp) - FAILURE : rsync failed. Please refer to the solution documentation " >> $status
+      exit 1
+
+   fi
+
+      echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $drupalfiles =====" >> $status
+
+fi
 
 for i in ${webservers[@]}; do
 
