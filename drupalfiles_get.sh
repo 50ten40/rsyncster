@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ignore_files=(all default)
+ignore_files=(all default kelleygraham.com)
 
 cd /var/www/html/kelleygraham.com/sites
 shopt -s dotglob 

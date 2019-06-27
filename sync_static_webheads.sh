@@ -7,7 +7,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 
 webservers=(192.237.251.89) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
 
-drupal_files_list=($(ssh cloud2int 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
+drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
 
 #status="$MANAGE_DIR/datasync-webheads-$1.status"
 
@@ -42,10 +42,11 @@ else
 
 fi
 
-if [$ONEDOMAIN in $(drupal_files_list[@]; then
+if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
+   
 
     echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $drupalfiles =====" >> $status
-    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$drupalfiles $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
 
     if [ $? = "1" ]; then
 
