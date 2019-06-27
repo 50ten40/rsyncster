@@ -42,7 +42,7 @@ else
 
 fi
 
-if $ONEDOMAIN in $(drupal_files_list[@]; then
+if [$ONEDOMAIN in $(drupal_files_list[@]; then
 
     echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $drupalfiles =====" >> $status
     nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$drupalfiles $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
