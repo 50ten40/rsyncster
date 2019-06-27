@@ -5,7 +5,7 @@ Philosophy is seven second rule. Seven seconds total to capture visitors attenti
 
 This is very basic sloppy code, please vent your frustrations by fixing and sharing your awesome improvements. :)
 
-__Status:__ __05dec2018 - Works__. Need to update listicle on app_servers from wget_get_changes.pl. Pre-release version __rsyncster\_v.0.9.0.2-alpha-01dec2018__. First pass on synchronous downloads. Screwy logging, needs rewrite. Going to try rerun bash framework for standardized logging and installation. This version is for those who know their web backends. It is not polished.
+__Status:__ __26jun2019 - Works__. Merged DEV->master. Begin work on drupalfiles feature to allow sliders and such in status webheads without needing haproxy rewrites to drupal backends.
 
 __Dependencies__
 * Perl
