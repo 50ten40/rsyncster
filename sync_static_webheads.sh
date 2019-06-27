@@ -60,11 +60,7 @@ fi
 
 for i in ${webservers[@]}; do
 
-<<<<<<< HEAD
-   echo " - TASK : ===== Beginning rsync push of  static content to webhead $i =====" >> $status
-=======
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
->>>>>>> 38cb671247714a877a909ce7a17d6aab66bb1f23
 
       if ! [ $i = "192.237.251.89" ]; then
 
@@ -76,18 +72,6 @@ for i in ${webservers[@]}; do
 
       fi
 
-<<<<<<< HEAD
-      nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
-
-      if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then
-
-         echo " - TASK : Configuring nginx for $i" >> $status
-         nice -n 20 rsync -avilzx -e ssh /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
-	 ssh root@$i "cd /etc/nginx/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
-         ssh root@$i "systemctl condreload nginx"
-         ssh root@$i "systemctl status nginx"
-
-=======
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
 
       if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then
@@ -98,7 +82,6 @@ for i in ${webservers[@]}; do
          ssh root@$i "systemctl condreload nginx"
          ssh root@$i "systemctl status nginx"
 
->>>>>>> 38cb671247714a877a909ce7a17d6aab66bb1f23
       fi
 
    if [ $? = "1" ]; then
