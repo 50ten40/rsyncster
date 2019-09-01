@@ -87,7 +87,17 @@ foreach (@domains) {
 	} else {
 
 		my $dir = "$sub_domain\.$_";
-                chdir($dir) or die "$!";
+		
+		if (-d $dir) {
+		
+			chdir($dir) or die "$!";
+		
+		} else {
+
+                	mkdir($dir) or die "$!";
+			system("echo \" - TASK : Creating $dir \" >> $status");
+
+		}
 		
 		my $msg = " - TASK : Fetching files from $host";
                         system("echo \"$msg\" >> $status");
