@@ -10,6 +10,7 @@ MANAGE_DIR="$HOME/$MANAGE_STRING" # Your management directory location.
 WORKING_DIR="$DOCROOT_DIR/$CHANGES_STRING" # Processing directory. Make sure nginx has rule for securing dotfiles.
 DOMAINS_FILE="$DOCROOT_DIR/$CHANGES_STRING/domains.lst"
 RSYNCSTER_SCRIPT="$MANAGE_DIR/rsyncster/main.sh"
+DRUPAL_CACHE="0" # Off by default. Script will not clear cache. If enabled, know the performance hit on larger sites.
 APP_SERVERS="cloud1int cloud2int"
 APP_SERVERS_SHORTNAME="cloud"
 APP_SERVERS_MASTER="cloud2int"
