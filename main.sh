@@ -4,7 +4,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-if [ $DRUPAL_CACHE == On ]; then
+if [ $DRUPAL_CACHE == "On" ]; then
  
    if [ "$2" == "upgrade" ]; then
       echo "$(timestamp) - TASK : Starting CMS cache flush." >> $status
