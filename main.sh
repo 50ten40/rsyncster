@@ -4,7 +4,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-if [ $DRUPAL_CACHE ]; then
+if [ $DRUPAL_CACHE == On ]; then
  
    if [ "$2" == "upgrade" ]; then
       echo "$(timestamp) - TASK : Starting CMS cache flush." >> $status
@@ -20,9 +20,12 @@ if [ $DRUPAL_CACHE ]; then
 
       echo "$(timestamp) - SUCCESS : Completed CMS cache flush." >> $status
 
-   echo "$(timestamp) - NOTICE : Skipping CMS cache flush." >> $status
-
    fi
+
+else
+      
+      echo "$(timestamp) - NOTICE : Skipping CMS cache flush." >> $status
+
 fi
 
 sudo $MANAGE_DIR/rsyncster/wget_static_drupal.pl $1 && sudo $MANAGE_DIR/rsyncster/publish.sh $1 && sudo $MANAGE_DIR/rsyncster/sync_static_webheads.sh $1
