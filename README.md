@@ -23,9 +23,9 @@ __Backend environment__
 * Apache2 ( no config support )
 
 __CMS assumptions__
-* Simplified one-page interface. Bootstrap theme.
+* Simplified one-page interface. Bootstrap or another lean theme.
 * Mobile emphasis. Reduced or no menus, mobile users can't see without poking a widget, generally don't use.
-* Reduced orn no ajax, sliding features etc.
+* Reduced or no ajax, sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
 * No need to use drupal caching. (Todo: check for caching status before flushing)
