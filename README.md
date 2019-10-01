@@ -23,23 +23,25 @@ __Backend environment__
 * Apache2 ( no config support )
 
 __CMS assumptions__
-* Simplified one-page interface. Bootstrap theme.
-* Mobile emphasis. No menus, mobile users can't see, don't use.
-* No ajax or sliding features etc.
+* Simplified one-page interface. Bootstrap or another lean theme.
+* Mobile emphasis. Reduced or no menus, mobile users can't see without poking a widget, generally don't use.
+* Reduced or no ajax, sliding features etc.
 * Deep functionality and ui complexity available with login.
 * Public facing assets are obsessively lean and easily consumed.
+* No need to use drupal caching. (Todo: check for caching status before flushing)
 
 __Rsyncster Installation__
 * Git clone https://github.com/50ten40/rsyncster.git to your management directory.
 * No documentation, you'll just have to read the code.
 * Usage: Call cron\_get\_changes.sh from cron entry. Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
 * Configure variables for your setup.
+* Configure load balancer internal dns record or /etc/hosts
 
 __Basic Drupal Workflow__
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
 * Update $base_url in settings.php (required)
 * Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
-* Enable anonymous page caching (required)
+* Disable anonymous page caching if using php opcache, memcache or other caching scheme.
 * Turn off database logging (optional)
 * Verify custom logos and favicon. Set in theme and global settings.(optional)
 * Update scripts with your subdomain

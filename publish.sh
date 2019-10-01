@@ -46,12 +46,8 @@ for i in ${webservers[@]}; do
 
    if [ "$i" = "localhost" ]; then
       
-<<<<<<< HEAD
       nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
-=======
-      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
->>>>>>> 38cb671247714a877a909ce7a17d6aab66bb1f23
-      
+
       nginx_conf="/etc/nginx/sites-enabled/static.$ONEDOMAIN.conf"
 
       if [ ! -L "$nginx_conf" ]; then
@@ -62,11 +58,8 @@ for i in ${webservers[@]}; do
 
    else
 
-<<<<<<< HEAD
+
       nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_PATH/exclusions.lst -e ssh $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
-=======
-      nice -n 20 /usr/bin/rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/staging/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
->>>>>>> 38cb671247714a877a909ce7a17d6aab66bb1f23
 
    fi
 
