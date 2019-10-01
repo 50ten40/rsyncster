@@ -35,6 +35,7 @@ __Rsyncster Installation__
 * No documentation, you'll just have to read the code.
 * Usage: Call cron\_get\_changes.sh from cron entry. Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
 * Configure variables for your setup.
+* Configure load balancer internal dns record or /etc/hosts
 
 __Basic Drupal Workflow__
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
