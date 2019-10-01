@@ -2,7 +2,7 @@
 #Usage:
 #wget.pl "<URL(s)>" [wait]
 
-
+#use URI; #for later
 
 die("Please provide URL or \"all\" to update all static domains.\n") unless ($ARGV[0]);
 
@@ -38,8 +38,11 @@ foreach (@domains) {
 
 	chomp($_);
 	
+	#my $uri = URI->new($_); #for later
+	#my $host = $uri->host; #for later
 	my $host = "$_";
-	my $URL = "$scheme"."$load_balancer\.$host";
+	my ($top_level) = $host =~ m/([^.]+\.[^.]+$)/;
+	my $URL = "$scheme"."$load_balancer\.$top_level";
 	my $listicle = "$working_dir/$_\.$sub_domain\.$_";
 	
 	if (-s $listicle > 3) {
