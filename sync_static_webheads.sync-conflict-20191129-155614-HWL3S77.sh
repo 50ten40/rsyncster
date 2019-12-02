@@ -5,7 +5,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(192.168.0.206 192.237.251.89) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
+webservers=(192.237.251.89) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
 
 drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
 
@@ -45,7 +45,7 @@ fi
 if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
    
 
-    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $ONEDOMAIN =====" >> $status
+    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $drupalfiles =====" >> $status
     nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
 
     if [ $? = "1" ]; then
@@ -75,13 +75,13 @@ for i in ${webservers[@]}; do
 
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
 
-      if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manuall at this time. TODO
+      if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then
 
          echo " - TASK : Configuring nginx for $i" >> $status
          nice -n 20 rsync -avilzx -e ssh /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
 	 ssh root@$i "cd /etc/nginx/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
-         ssh root@$i "service nginx condreload"
-         ssh root@$i "service nginx status"
+         ssh root@$i "systemctl condreload nginx"
+         ssh root@$i "systemctl status nginx"
 
       fi
 
