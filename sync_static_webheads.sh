@@ -5,7 +5,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(192.168.0.206 192.237.251.89) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
+webservers=(192.168.0.206 192.237.251.89 73.24.185.56) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
 
 drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
 
@@ -80,7 +80,7 @@ for i in ${webservers[@]}; do
          echo " - TASK : Configuring nginx for $i" >> $status
          nice -n 20 rsync -avilzx -e ssh /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
 	 ssh root@$i "cd /etc/nginx/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
-         ssh root@$i "service nginx condreload"
+         ssh root@$i "service nginx reload"
          ssh root@$i "service nginx status"
 
       fi
