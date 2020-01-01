@@ -8,7 +8,6 @@
 .git*
 *.git*
 */civicrm/*
-/user
-/user*
 .changes*
+/user/*
 /sites*
