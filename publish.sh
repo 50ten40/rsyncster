@@ -5,7 +5,7 @@ LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(localhost) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
+webservers=(localhost 192.168.0.206) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
 
 #status="$MANAGE_DIR/datasync-$CHANGES_STRING.status"
 
