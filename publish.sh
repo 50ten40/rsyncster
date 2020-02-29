@@ -1,11 +1,11 @@
 #!/bin/bash
-# push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
+# push-datasync.sh - Publish staging to live on all development servers.
 
 LIB_PATH="$HOME/manage/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(localhost 192.168.0.206) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
+stagingservers=(localhost 192.168.0.206) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
 
 #status="$MANAGE_DIR/datasync-$CHANGES_STRING.status"
 
@@ -40,7 +40,7 @@ else
 fi
 
 
-for i in ${webservers[@]}; do
+for i in ${stagingservers[@]}; do
 
    echo "$(timestamp) - ===== Beginning publish of staging -> live on $i =====" >> $status
 
