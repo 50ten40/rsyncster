@@ -19,14 +19,13 @@ __Dependencies__
 
 __Backend environment__
 * Haproxy
-* Nginx
+* Nginx ( partial config support )
 * Apache2 ( no config support )
 
 __CMS assumptions__
-* Simplified one-page interface. Bootstrap theme.
-* Mobile emphasis. No menus, mobile users can't see, don't use.
-* No ajax or sliding features etc.
-* Deep functionality and ui complexity available with login.
+* Simplified interface. Assumed Bootstrap theme.
+* Mobile emphasis..
+* Deep functionality available only with login.
 * Public facing assets are obsessively lean and easily consumed.
 
 __Rsyncster Installation__
@@ -36,12 +35,12 @@ __Rsyncster Installation__
 * Configure variables for your setup.
 
 __Basic Drupal Workflow__
-* Change top level dns record. eg domain.tld -> subdomain.domain.tld
+* Change top level dns record. eg domain.tld -> subdomain.domain.tld do not use for public access. Haproxy :). Read code for rationale.
 * Update $base_url in settings.php (required)
 * Edit site according to CMS assumptions above. eg Strip out everything that is unneccessary.
-* Enable anonymous page caching (required)
-* Turn off database logging (optional)
-* Verify custom logos and favicon. Set in theme and global settings.(optional)
+* Disable page caching ( required, your site is static, don't need drupal caching )
+* Turn off database logging ( optional )
+* Verify custom logos and favicon. Set in theme and global settings.( optional )
 * Update scripts with your subdomain
 * Run scripts as needed
 * Enjoy!
