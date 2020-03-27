@@ -73,6 +73,13 @@ for i in ${webservers[@]}; do
 
       fi
 
+      if ! ssh root@$i "test -L /var/www/html/live"; then # check for live folder, provision if needed. Todo: add folder path to .env.sh
+
+         echo " - NOTICE : Docroot folder not found. Configuring docroot folder for $i" >> $status
+	 mkdir -v /var/www/html/live >> $status
+
+      fi
+
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
 
       if ! ssh root@$i "test -L /etc/nginx/sites-enabled/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manually at this time. TODO
