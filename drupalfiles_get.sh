@@ -1,4 +1,5 @@
 #!/bin/bash
+# This helper script is run on the primary APP_SERVER
 
 ignore_files=(all default kelleygraham.com permatecture.pro faf.photos braingurus.com signup.fafchat.com signup.faf.chat signup.faf.photos rodpweiss.com signup.faf.social signup.mastery.chat)
 
