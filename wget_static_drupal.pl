@@ -33,6 +33,10 @@ if ($ARGV[0] eq "all") {
 	close VIRTUALS;
 }
 
+if (! -d $staging_dir) {
+      mkdir $staging_dir or die "$!";
+}
+
 chdir($staging_dir) or die "$!";
 
 foreach (@domains) {

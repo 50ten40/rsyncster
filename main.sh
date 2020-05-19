@@ -28,4 +28,4 @@ else
 
 fi
 
-sudo $MANAGE_DIR/rsyncster/wget_static_drupal.pl $1 && sudo $MANAGE_DIR/rsyncster/publish.sh $1 && sudo $MANAGE_DIR/rsyncster/sync_static_webheads.sh $1
+sudo $HOME/rsyncster/wget_static_drupal.pl $1 && sudo $HOME/rsyncster/publish.sh $1 && sudo $HOME/rsyncster/sync_static_webheads.sh $1

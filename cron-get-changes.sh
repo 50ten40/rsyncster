@@ -8,6 +8,8 @@ LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/function_sync.sh
 . $LIB_PATH/function_timestamp.sh
 
+# Housekeeping
+
 if [ ! -d /tmp/$CHANGES_STRING.lock ]; then
 
    /bin/mkdir /tmp/$CHANGES_STRING.lock
@@ -20,12 +22,28 @@ if [ $? = "1" ]; then
 
 else
 
-   if [ ! -d $LOG_DIR ]; then
-      /bin/mkdir $LOG_DIR
-   fi
    echo "$(timestamp) - SUCCESS : created $CHANGES_STRING.lock" > $status
 
 fi
+
+if [ ! -d $LOG_DIR ]; then
+
+      /bin/mkdir $LOG_DIR
+      echo "$(timestamp) - SUCCESS : created $LOG_DIR" >> $status                                                  
+
+fi
+
+if [ $? = "1" ]; then
+
+   echo "$(timestamp) - FAILURE : unable to create $LOG_DIR" >> $status
+
+else
+
+   echo "$(timestamp) - SUCCESS : created $LOG_DIR" >> $status
+
+fi
+
+# Function
 
 aggregate_changes
 
@@ -58,7 +76,7 @@ fi
 else 
 
    echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
-   sync
+   time sync
    /bin/rmdir /tmp/$CHANGES_STRING.lock
    
    if [ $? = "1" ]; then

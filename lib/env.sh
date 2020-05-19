@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Use for sanity checks.
-PREFIX="m" # Subdomain DNS prefix for CMS.
+PREFIX="m" # Subdomain DNS prefix required for local CMS processing.
 LOAD_BALANCER="lbint" # Where to point wget. See wait_time wget option.
 CHANGES_STRING=".changes" # Identifying string used in various contexts. Dotfile.
 DOCROOT_DIR="/var/www/html"
