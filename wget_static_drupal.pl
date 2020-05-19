@@ -18,7 +18,8 @@ my $sub_domain = "m";
 my $prefix = "$scheme"."$load_balancer";
 my @domains = $ARGV[0];
 my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib/.env.sh
-my $manage_dir = '/home/kelley/manage';
+my $manage_dir = '$HOME';
+my $staging_dir = 'var/www/html/staging';
 my $log_dir = "/var/log/rsyncster";
 my $web_user = "kelley";
 my $exclude_list = '/admin,/civicrm,/user,/contact';
@@ -32,7 +33,7 @@ if ($ARGV[0] eq "all") {
 	close VIRTUALS;
 }
 
-chdir('/var/www/html/staging') or die "$!";
+chdir($staging_dir) or die "$!";
 
 foreach (@domains) {
 
@@ -115,6 +116,6 @@ foreach (@domains) {
 
 	}
 
-	chdir('/var/www/html/staging') or die "$!";
+	chdir($staging_dir) or die "$!";
 	system("chown -R $web_user.$web_user $sub_domain\.$host");
 }

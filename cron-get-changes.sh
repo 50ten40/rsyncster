@@ -2,7 +2,7 @@
 # Call from cron. Scan for changes and invoke main.sh.
 # Using cookie sessions on haproxy. This script gathers changes from app servers. 
 
-LIB_PATH="$HOME/manage/rsyncster/lib"
+LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_aggregate_changes.sh
 . $LIB_PATH/function_sync.sh
