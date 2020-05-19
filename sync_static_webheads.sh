@@ -1,13 +1,13 @@
 #!/bin/bash
 # push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
 
-LIB_PATH="$HOME/manage/rsyncster/lib"
+LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-webservers=(192.168.0.206 192.168.0.67 192.237.251.89 73.24.185.56) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
+webservers=(192.168.0.206 192.237.251.89 73.24.185.56) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
 
-drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
+drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh')) # Todo: change to standard env variable path
 
 #status="$MANAGE_DIR/datasync-webheads-$1.status"
 

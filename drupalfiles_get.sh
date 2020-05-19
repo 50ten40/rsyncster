@@ -14,5 +14,3 @@ done
 for dir in "${drupalfiles[@]}";
    do echo "$dir";
 done
-
-

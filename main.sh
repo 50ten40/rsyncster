@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LIB_PATH="$HOME/manage/rsyncster/lib"
+LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
