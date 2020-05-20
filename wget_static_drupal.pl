@@ -33,7 +33,7 @@ if ($ARGV[0] eq "all") {
 	close VIRTUALS;
 }
 
-if (! -d $staging_dir) {
+unless (-d $staging_dir) {
       mkdir $staging_dir or die "$!";
 }
 
