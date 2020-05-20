@@ -34,3 +34,4 @@ __Basic Drupal Workflow__
 * Verify custom logos and favicon. Set in theme and global settings. (optional)
 * Update scripts with your subdomain
 * Run scripts as needed. Log(s) to /var/log/rsyncster/
+* NOTE: Install reaction rule. Requires rules module and php filter.
