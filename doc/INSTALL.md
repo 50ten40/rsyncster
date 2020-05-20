@@ -1,5 +1,6 @@
 # rsyncster
 CMS -> Static site generation using standard \*nix utilities. (Documentation stub)
+
 __Dependencies__
 * Bash
 * Sudo
