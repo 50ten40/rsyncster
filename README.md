@@ -17,12 +17,13 @@ __Dependencies__
 * Time
 
 __Backend environment__
-* Haproxy
+* Haproxy (no config support, none planned )
 * Nginx ( partial config support )
-* Apache2 ( no config support )
+* Apache2 ( no config support, none planned )
 
 __CMS assumptions__
-* Simplified interface. Assumed Bootstrap theme.
-* Mobile emphasis..
-* Deep functionality available only with login.
-* Public facing assets are obsessively lean and easily consumed.
+* Simplified responsive user experience.
+* Mobile emphasis.
+* Deep cms functionality available only with login.
+* Public facing assets are plain html and javascript.
+* Sites are lean and easily consumed on small screens.
