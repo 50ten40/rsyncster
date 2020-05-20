@@ -5,8 +5,6 @@ LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-stagingservers=(localhost 192.168.0.206) # Multiple staging locations, (your workflow may vary) TODO: Get from .env.sh
-
 if [ -d /tmp/.one-publish-rsync.$1.lock ]; then
    echo " - TASK : rsync lock exists : Continuing publish." >> $status
 fi

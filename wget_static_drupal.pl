@@ -121,5 +121,6 @@ foreach (@domains) {
 	}
 
 	chdir($staging_dir) or die "$!";
-	system("chown -R $web_user.$web_user $sub_domain\.$host");
+	system("chown -R $web_user $sub_domain\.$host");
+	system("chgrp -R $web_user $sub_domain\.$host");
 }

@@ -43,7 +43,7 @@ else
 
 fi
 
-# Function
+# Call function to get changes from APP_SERVER(S)
 
 aggregate_changes
 

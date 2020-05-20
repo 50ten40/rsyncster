@@ -17,3 +17,5 @@ LOG_DIR="/var/log/rsyncster"
 status="$LOG_DIR/datasync-$CHANGES_STRING.status"
 exclusions="$LIB_DIR/exclusions.lst"
 wait_time="" # Passed to wget to manage server load during fetch.
+stagingservers=(localhost 192.168.0.206)
+webservers=(192.168.0.206 192.237.251.89 73.24.185.56)
