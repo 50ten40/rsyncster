@@ -5,8 +5,8 @@ __Dependencies__
 * Bash
 * Sudo
 * Perl
-* Wget
-* Rsync
+* Wget 
+* Rsync (via ssh shared keys required)
 * Sed
 * Cron
 * Find
