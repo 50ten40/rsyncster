@@ -22,6 +22,7 @@ __Rsyncster Installation__
 * No documentation except this file, you'll just have to read the code and comments.
 * Usage: Call cron_get_changes.sh from cron entry (see crontab.example in extras). Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
 * NOTE: Configure variables in lib/env.sh.
+* NOTE: I update #!/path/to/bash path with symlinks. Eventually I'll get to more portable auto path feature.
 
 __Basic Drupal Workflow__
 * Change top level dns record. eg domain.tld -> subdomain.domain.tld
