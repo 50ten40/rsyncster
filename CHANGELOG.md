@@ -1,6 +1,6 @@
 __Status:__ __19may2020 - Works__. Refactor for portability. After a year in production on Ubuntu Linux, moving to freebsd jail. Interesting work re. time and xargs refactor.
 
-__Status:__ __26jun2019 - Works__. Merged DEV chanes into master, cause it's good enuf. Will update pre-relese with changes within a month.
+__Status:__ __26jun2019 - Works__. Merged DEV chanes into master, cause it's good enuf.
 
 __Status:__ __05dec2018 - Works__. Need to update listicle on app_servers from wget_get_changes.pl. Pre-release version
 
