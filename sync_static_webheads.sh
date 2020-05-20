@@ -5,9 +5,7 @@ LIB_PATH="$HOME/rsyncster/lib"
 . $LIB_PATH/env.sh
 . $LIB_PATH/function_timestamp.sh
 
-drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh')) # Todo: change to standard env variable path
-
-#status="$MANAGE_DIR/datasync-webheads-$1.status"
+drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash $HOME/rsyncster/drupalfiles_get.sh')) # Todo: change to standard env variable path
 
 if [ -d /tmp/.webheads.$1.lock ]; then
    

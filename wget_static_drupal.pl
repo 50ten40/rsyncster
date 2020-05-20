@@ -110,7 +110,7 @@ foreach (@domains) {
 		my $msg = " - TASK : Fetching files from $host";
                         system("echo \"$msg\" >> $status");
 
-   		system("wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
+   		system("/usr/local/bin/wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
 		open(DOMS,"+< $domains_list") or die $!;
                         my @doms = <DOMS>;
                         foreach my $line (@doms) {
