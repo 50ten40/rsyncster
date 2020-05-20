@@ -28,8 +28,7 @@ fi
 
 if [ ! -d $LOG_DIR ]; then
 
-      /bin/mkdir $LOG_DIR
-      echo "$(timestamp) - SUCCESS : created $LOG_DIR" >> $status                                                  
+      /bin/mkdir $LOG_DIR                                                  
 
 fi
 
@@ -71,12 +70,12 @@ if [ -f $DOMAINS_FILE ] && [ ! -s $DOMAINS_FILE ] ; then
         
       echo "$(timestamp) - SUCCESS : Deleted $CHANGES_STRING.lock" >> $status
       exit 1
-fi
+   fi
 
 else 
 
    echo "$(timestamp) - SUCCESS : Syncing changes list" >> $status
-   time sync
+   { time -p sync ; } 2>> $status
    /bin/rmdir /tmp/$CHANGES_STRING.lock
    
    if [ $? = "1" ]; then

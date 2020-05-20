@@ -26,7 +26,7 @@ my $exclude_list = '/admin,/civicrm,/user,/contact';
 my $domains_list = "$working_dir/domains.lst";
 my $status = "$log_dir/datasync-.changes.status";
 
-if ($ARGV[0] eq "all") { 
+if ($ARGV[0] eq "all") { # Not in use currently. Get from live server via get_drupal_files function. Manage dir deprecated.
 	
 	open(VIRTUALS, "$manage_dir/virt_domains.list") or die $!; # Todo: Get from nginx/apache sites-enabled
 	my @domains = <VIRTUALS>;

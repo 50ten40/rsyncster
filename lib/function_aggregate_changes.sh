@@ -18,10 +18,10 @@ aggregate_changes() {
       mkdir $WORKING_DIR
    fi
 
-   sed -i s/^$PREFIX\.//g /tmp/$CHANGES_STRING.lst
+   sed -i '' s/^$PREFIX\.//g /tmp/$CHANGES_STRING.lst
    sort /tmp/$CHANGES_STRING.lst -u > $DOMAINS_FILE
-   sed -i s/"$CHANGES_STRING\/"/""/g $DOMAINS_FILE
-   sed -i /^$/d $DOMAINS_FILE
+   sed -i '' s/"$CHANGES_STRING\/"/""/g $DOMAINS_FILE
+   sed -i '' /^$/d $DOMAINS_FILE
 
    for i in $APP_SERVERS; do
 

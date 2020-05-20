@@ -25,7 +25,7 @@ sync() {
       #END_TIME=`echo $(($(date +%s%N/1000000000)))`
       #ELAPSED_TIME=$(($END_TIME - $START_TIME))
       
-      echo "$(timestamp) - FUNCTION : Sync of $i completed. Execution stats displayed in console" >> $status 
+      echo "$(timestamp) - FUNCTION : Sync of $i completed." >> $status 
       
       /bin/rmdir /tmp/$CHANGES_STRING.sync.$i.lock
       echo "$(timestamp) - SUCCESS : Deleted $CHANGES_STRING.sync.$i.lock" >> $status
