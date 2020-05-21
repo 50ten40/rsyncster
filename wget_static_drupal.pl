@@ -67,7 +67,7 @@ foreach (@domains) {
                         system("echo \"$msg\" >> $status");
 
 			my $target = "$_";
-			system("wget -x -nH -mpk --base=$host -l 1 --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $target");
+			system("/usr/local/bin/wget -x -nH -mpk --base=$host -l 1 --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $target");
 			
 			my $msg = " - TASK : Fetch completed for $_";
                         system("echo \"$msg\" >> $status");
