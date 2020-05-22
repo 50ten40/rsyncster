@@ -6,31 +6,58 @@
 
 die("Please provide URL or \"all\" to update all static domains.\n") unless ($ARGV[0]);
 
-if ($ARG[2]) {
-	my $waitTime = "--wait $ARGV[2]"; 
-} else { 
-	my $waitTime = "";
+#use strict;
+
+# Get source from lib/env.sh
+use Env::Modify 'source', ':bash';
+my $result = source("$ENV{HOME}/rsyncster/lib/env.sh");
+
+if ($ENV{DEBUG} eq "yes") {
+
+	my $msg = " - TEST : Result of source cmd is $result";
+	system("echo \"$msg\" >> $ENV{status}");
+	my $msg = " - TEST : Status destination is $ENV{status}";
+	system("echo \"$msg\" >> $ENV{status}");
+
 }
 
-my $scheme = "https://";
-my $load_balancer = "lbint";
-my $sub_domain = "m";
-my $prefix = "$scheme"."$load_balancer";
+# Get wait time 
+if ($ARG[2]) {
+
+	my $waitTime = "--wait $ARGV[2]";
+
+} else {
+
+	my $waitTime = "--wait $ENV{waittime}";
+}
+
+my $scheme = $ENV{SCHEME};
+my $lb = $ENV{LOADBALANCER};
+my $sub_domain = $ENV{PREFIX};
+my $prefix = "$scheme"."$lb";
 my @domains = $ARGV[0];
-my $working_dir = '/var/www/html/.changes'; # Todo: Source from lib/.env.sh
-my $manage_dir = '$HOME';
-my $staging_dir = '/var/www/html/staging';
-my $log_dir = "/var/log/rsyncster";
-my $web_user = "kelley";
-my $exclude_list = '/admin,/civicrm,/user,/contact';
-my $domains_list = "$working_dir/domains.lst";
-my $status = "$log_dir/datasync-.changes.status";
+my $working_dir = $ENV{WORKINGDIR};
+my $manage_dir = $ENV{HOME};
+my $staging_dir = $ENV{STAGINGDIR};
+my $log_dir = $ENV{LOGDIR};
+my $web_user = $ENV{WEBUSER};
+my $exclude_list = $ENV{exclusions};
+my $domains_list = $ENV{DOMAINSFILE};
+my $status_file = $ENV{status};
+my $waitTime = "";
 
 if ($ARGV[0] eq "all") { # Not in use currently. Get from live server via get_drupal_files function. Manage dir deprecated.
 	
-	open(VIRTUALS, "$manage_dir/virt_domains.list") or die $!; # Todo: Get from nginx/apache sites-enabled
+	open(VIRTUALS, "$manage_dir/virt_domains.list") or die $!;
 	my @domains = <VIRTUALS>;
 	close VIRTUALS;
+}
+
+if ($ENV{DEBUG} eq "yes") {
+
+	my $msg = " - TEST : Perl env for staging directory set to $staging_dir";
+	system("echo \"$msg\" >> $status_file");
+
 }
 
 unless (-d $staging_dir) {
@@ -47,7 +74,7 @@ foreach (@domains) {
 	#my $host = $uri->host; #for later
 	my $host = "$_";
 	my ($top_level) = $host =~ m/([^.]+\.[^.]+$)/;
-	my $URL = "$scheme"."$load_balancer\.$top_level";
+	my $URL = "$scheme"."$lb\.$top_level";
 	my $listicle = "$working_dir/$_\.$sub_domain\.$_";
 	
 	if (-s $listicle > 3) {
@@ -64,13 +91,13 @@ foreach (@domains) {
 			chomp($_);
 			
 			my $msg = " - TASK : Fetching $_";
-                        system("echo \"$msg\" >> $status");
+                        system("echo \"$msg\" >> $status_file");
 
 			my $target = "$_";
 			system("/usr/local/bin/wget -x -nH -mpk --base=$host -l 1 --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $target");
 			
 			my $msg = " - TASK : Fetch completed for $_";
-                        system("echo \"$msg\" >> $status");
+                        system("echo \"$msg\" >> $status_file");
 	
 			open(PAGES,"+< $listicle") or die $!;
                 	my @pages = <PAGES>;
@@ -80,7 +107,7 @@ foreach (@domains) {
 			close(PAGES);
 
 			my $msg = " - TASK : Removed listicle entry $_";
-                        system("echo \"$msg\" >> $status");			
+                        system("echo \"$msg\" >> $status_file");			
 		
 		}
 		
@@ -90,7 +117,7 @@ foreach (@domains) {
 
 
 		#my $msg = " - TASK : Unlinking changes file for $_";
-                #system("echo \"$msg\" >> $status");
+                #system("echo \"$msg\" >> $status_file");
 		
 	} else {
 
@@ -103,12 +130,12 @@ foreach (@domains) {
 		} else {
 
                 	mkdir($dir) or die "$!";
-			system("echo \" - TASK : Creating $dir \" >> $status");
+			system("echo \" - TASK : Creating $dir \" >> $status_file");
 
 		}
 		
 		my $msg = " - TASK : Fetching files from $host";
-                        system("echo \"$msg\" >> $status");
+                        system("echo \"$msg\" >> $status_file");
 
    		system("/usr/local/bin/wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
 		open(DOMS,"+< $domains_list") or die $!;
@@ -121,6 +148,10 @@ foreach (@domains) {
 	}
 
 	chdir($staging_dir) or die "$!";
+	my $msg = " - TASK : Setting web user to $web_user";
+	system("echo \"$msg\" >> $status_file");
 	system("chown -R $web_user $sub_domain\.$host");
+	my $msg = " - TASK : Setting web group to $web_user";
+        system("echo \"$msg\" >> $status_file");
 	system("chgrp -R $web_user $sub_domain\.$host");
 }
