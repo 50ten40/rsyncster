@@ -5,6 +5,7 @@ __Dependencies__
 * Bash
 * Sudo
 * Perl
+* Perl Module - ENV/Modify 
 * Wget 
 * Rsync (via ssh shared keys required)
 * Sed
@@ -21,9 +22,9 @@ __Rsyncster Installation__
 * Git clone https://github.com/50ten40/rsyncster.git to your $HOME directory. Script assumes $HOME/rsyncster for lib calls.
 * No documentation except this file, you'll just have to read the code and comments.
 * Usage: Call cron_get_changes.sh from cron entry (see crontab.example in extras). Each script component in main.sh can be called standalone. Pass a domain name or option. There are helper scripts in ./extras.
-* NOTE: Configure variables in lib/env.sh.
+* Configure variables in lib/env.sh.
+* Env/Modify - "perl -MCPAN -e shell" at perl shell prompt "install Env::Modify"
 * NOTE: I update #!/path/to/bash using symlinks. Eventually I'll get to more portable OS based auto path env.sh feature.
-* NOTE: Regardless of cluster or single instance, you must update your rsync arrays inline. I haven't yet moved publish config to env.sh.
 * NOTE: Access via ssh shared keys are required.
 
 __Basic Drupal Workflow__
