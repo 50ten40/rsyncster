@@ -31,20 +31,21 @@ if ($ARG[2]) {
 	my $waitTime = "--wait $ENV{waittime}";
 }
 
-my $scheme = $ENV{SCHEME};
-my $lb = $ENV{LOADBALANCER};
-my $sub_domain = $ENV{PREFIX};
-my $prefix = "$scheme"."$lb";
-my @domains = $ARGV[0];
-my $working_dir = $ENV{WORKINGDIR};
-my $manage_dir = $ENV{HOME};
-my $staging_dir = $ENV{STAGINGDIR};
-my $log_dir = $ENV{LOGDIR};
-my $web_user = $ENV{WEBUSER};
-my $exclude_list = $ENV{exclusions};
-my $domains_list = $ENV{DOMAINSFILE};
-my $status_file = $ENV{status};
-my $waitTime = "";
+our $scheme = $ENV{SCHEME};
+our $lb = $ENV{LOADBALANCER};
+our $sub_domain = $ENV{PREFIX};
+our $prefix = "$scheme"."$lb";
+our @domains = $ARGV[0];
+our $working_dir = $ENV{WORKINGDIR};
+our $manage_dir = $ENV{HOME};
+our $staging_dir = $ENV{STAGINGDIR};
+#our $staging_dir = "/var/www/html/staging";
+our $log_dir = $ENV{LOGDIR};
+our $web_user = $ENV{WEBUSER};
+our $exclude_list = $ENV{exclusions};
+our $domains_list = $ENV{DOMAINSFILE};
+our $status_file = $ENV{status};
+our $waitTime = "";
 
 if ($ARGV[0] eq "all") { # Not in use currently. Get from live server via get_drupal_files function. Manage dir deprecated.
 	
@@ -53,9 +54,10 @@ if ($ARGV[0] eq "all") { # Not in use currently. Get from live server via get_dr
 	close VIRTUALS;
 }
 
+my $msg = " - TEST : Perl env for staging directory set to $staging_dir";
+
 if ($ENV{DEBUG} eq "yes") {
 
-	my $msg = " - TEST : Perl env for staging directory set to $staging_dir";
 	system("echo \"$msg\" >> $status_file");
 
 }
