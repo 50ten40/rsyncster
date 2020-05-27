@@ -59,13 +59,13 @@ for i in ${webservers[@]}; do
 
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
 
-      if ! [ $i = "192.237.251.89" ]; then
+      if [ $i = "192.237.251.89" ]; then
 
-         NPREFIX="static"
+         NPREFIX="db2.static"
 
       else
 
-         NPREFIX="db2.static"
+         NPREFIX="static"
 
       fi
 
