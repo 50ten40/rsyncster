@@ -1,4 +1,6 @@
-__Status:__ __19may2020 - Works__. Refactor for portability. After 3 years in production on Ubuntu Linux on ancient 32 bit hardware, moving to freebsd jail. Interesting work re. time, xargs refactor.
+__Status:__ __21may2020 - Works__. Refactor for FreeBSD complete. Works. Debug feature started. Perl script wget..pl now sources lib/sh.
+
+__Status:__ __19may2020 - Broke__. Refactor for portability. After 3 years in production on Ubuntu Linux on ancient 32 bit hardware, moving to freebsd jail. Interesting work re. time, xargs refactor.
 
 __Status:__ __26jun2019 - Works__. Merged DEV chanes into master, cause it's good enuf.
 
