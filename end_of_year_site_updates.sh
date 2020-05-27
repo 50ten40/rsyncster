@@ -1,16 +1,20 @@
 #!/bin/bash
 
-LIB_PATH="$HOME/rsyncster/lib"
-. $LIB_PATH/env.sh
+LIBPATH="$HOME/rsyncster/lib"
+. $LIBPATH/env.sh
+. $LIBPATH/function_timestamp.sh
 
-cd $WORKING_DIR
+cd $WORKINGDIR
 
-#cd $MANAGE_DIR/rsyncster/testing
+drupal_files_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh'))
 
-mapfile -t <$MANAGE_DIR/virt_domains.list
+#mapfile -t <$HOME/rsyncster/virt_domains.list
 
-   for d in "${MAPFILE[@]}"; do
-
-	mkdir $d
-	touch $d/m.$d
+   for d in "${drupal_files_list[@]}"; do
+	echo "$(timestamp) - TASK - Setting up end of year refresh for ${d%%/}" >> $status
+	mkdir -v ${d%%/} >> $status
+	cd ${d%%/}
+	touch $PREFIX.${d%%/}
+	echo " - TASK - Creating flag $PREFIX.${d%%/}" in $WORKINGDIR/${d%%/} >> $status
+	cd $WORKINGDIR
    done
