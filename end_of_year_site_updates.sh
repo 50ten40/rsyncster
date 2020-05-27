@@ -6,15 +6,9 @@ LIBPATH="$HOME/rsyncster/lib"
 
 cd $WORKINGDIR
 
-if ! [ $APPSERVERSMASTER eq $(hostname -s) ] ; then
-	echo "$(timestamp)- TASK - Getting drupal files list on remote machine $APPSERVERSMASTER"
-	cmd=(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh')
-else
-	echo "$(timestamp)- TASK - Getting local drupal files list on local machine $APPSERVERSMASTER"
-	cmd=('bash $HOME/rsyncster/drupalfiles_get.sh')
-fi
+echo "$(timestamp)- TASK - Getting local drupal files list on $APPSERVERSMASTER"
 
-drupal_files_list=$cmd
+drupal_files_list=$(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh')
 
 #mapfile -t <$HOME/rsyncster/virt_domains.list
 
