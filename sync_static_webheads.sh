@@ -9,7 +9,7 @@ drupal_files_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get
 
 if [ -d /tmp/.webheads.$1.lock ]; then
    
-   echo " - TASK : lock exists : Continuing sync of $1" >> $status
+   echo " - NOTICE : /tmp/.webheads.$1.lock exists : If developing, do you need to remove? Otherwise, sync continues" >> $status
    cat $status
    exit 1
 
@@ -30,16 +30,16 @@ mkdir -v /tmp/.webheads.$1.lock
 
 if [ $? = "1" ]; then
 
-   echo "$(timestamp) - FAILURE : cannot create .webheads.lock" >> $status
+   echo "$(timestamp) - FAILURE : cannot create .webheads.$1.lock" >> $status
    exit 1
 
 else
 
-   echo " - SUCCESS : created sync webheads.lock" >> $status
+   echo " - SUCCESS : created sync webheads.$1.lock" >> $status
 
 fi
 
-if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
+if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then # need to add logic for finding drupal root path for standalone sites
    
 
     echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $ONEDOMAIN =====" >> $status
@@ -47,12 +47,12 @@ if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
 
     if [ $? = "1" ]; then
 
-      echo "$(timestamp) - FAILURE : rsync failed. Please refer to the solution documentation " >> $status
+      echo "$(timestamp) - FAILURE : Failed rsync of sites/default/files for $ONEDOMAIN. Please refer to the solution documentation " >> $status
       exit 1
 
    fi
 
-      echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $drupalfiles =====" >> $status
+      echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $ONEDOMAIN =====" >> $status
 
 fi
 
@@ -70,7 +70,7 @@ for i in ${webservers[@]}; do
 
       fi
 
-      if ! ssh root@$i "test -L $LIVEDIR" ; then # check for live folder, provision if needed.
+      if ! ssh root@$i "test -L $LIVEDIR || test -d $LIVEDIR" ; then # check for live folder, provision if needed.
 
          echo " - NOTICE : Docroot folder not found. Configuring docroot folder for $i" >> $status
 	 mkdir -v $LIVEDIR >> $status
@@ -87,7 +87,7 @@ for i in ${webservers[@]}; do
          NGINX_PATH="/usr/local/etc/nginx"
       fi
 
-      if ! ssh root@$i "test -L $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manually at this time. TODO
+      if ! ssh root@$i "test -e $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
 
          echo " - TASK : Configuring nginx for $i" >> $status
          nice -n 20 rsync -avilzx -e ssh $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:$NGINX_PATH/sites-available/
