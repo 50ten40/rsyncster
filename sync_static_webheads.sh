@@ -82,7 +82,7 @@ for i in ${webservers[@]}; do
       if "[ -d "/etc/nginx" ]"; then
          echo " - NOTICE : Found local linux nginx config dir on $i" >> $status
          LOCAL_NGINX_PATH="/etc/nginx"
-         LOCAL_NGINX_CMD="systemctl condreload nginx"
+         LOCAL_NGINX_CMD="systemctl condreload nginx" # cmd(s) currently unused
       else
          echo " - NOTICE : Found local bsd nginx config dir on $i" >> $status
          LOCAL_NGINX_PATH="/usr/local/etc/nginx"
