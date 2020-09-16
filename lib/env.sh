@@ -1,21 +1,30 @@
-#!/bin/sh
+#!/bin/bash
 
+DEBUG="yes"
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Use for sanity checks.
-PREFIX="m" # Subdomain DNS prefix for CMS.
-LOAD_BALANCER="lbint" # Where to point wget. See wait_time wget option.
-CHANGES_STRING=".changes" # Identifying string used in various contexts. Dotfile.
-MANAGE_STRING="" # Identifying string for management directory. Optional, leave blank if you cloned into your home directory.
-DOCROOT_DIR="/var/www/html"
-MANAGE_DIR="$HOME/$MANAGE_STRING" # Your management directory location.
-WORKING_DIR="$DOCROOT_DIR/$CHANGES_STRING" # Processing directory. Make sure nginx has rule for securing dotfiles.
-DOMAINS_FILE="$DOCROOT_DIR/$CHANGES_STRING/domains.lst"
-RSYNCSTER_SCRIPT="$MANAGE_DIR/rsyncster/main.sh"
-DRUPAL_CACHE="Off" # Off by default. Script will not clear cache. If enabled, know the performance hit on larger sites.
-APP_SERVERS="cloud1int cloud2int"
-APP_SERVERS_SHORTNAME="cloud"
-APP_SERVERS_MASTER="cloud2int"
-LIB_DIR="$MANAGE_DIR/rsyncster/lib"
-LOG_DIR="/var/log/rsyncster"
-status="$LOG_DIR/datasync-$CHANGES_STRING.status"
-exclusions="$LIB_DIR/exclusions.lst"
-wait_time="" # Passed to wget to manage server load during fetch.
+SCHEME="https://"
+PREFIX="m" # Subdomain DNS prefix required for local CMS processing.
+NPREFIX="static" # Used for nginx auto config
+HAPREFIX="" # Haproxy + nginx servers auto config
+LOADBALANCER="lbint" # Where to point wget. See wait_time wget option.
+CHANGESSTRING=".changes" # Identifying string for working files
+DOCROOTDIR="/var/www/html"
+STAGINGDIR="$DOCROOTDIR/staging"
+LIVEDIR="$DOCROOTDIR/live"
+WORKINGDIR="$DOCROOTDIR/$CHANGESSTRING" # Processing directory. Make sure nginx has rule for securing dotfiles.
+DOMAINSFILE="$WORKINGDIR/domains.lst"
+RSYNCSTERSCRIPT="$HOME/rsyncster/main.sh"
+DRUPALCACHE="Off" # Off by default. Script will not clear cache. If enabled, know the performance hit on larger sites.
+APPSERVERS="cloud1int cloud2int"
+APPSERVERSSHORTNAME="cloud"
+APPSERVERSMASTER="cloud2int"
+LIBDIR="$HOME/rsyncster/lib"
+LOGDIR="/var/log/rsyncster"
+WEBUSER="kelley"
+status="$LOGDIR/datasync-$CHANGESSTRING.status"
+exclusions="$LIBDIR/exclusions.lst"
+waittime="" # Passed to wget to manage server load during fetch.
+stagingservers=(localhost 192.168.0.206)
+webservers=(192.168.0.206 192.168.0.147 192.237.251.89 69.137.188.72)
+
+export DEBUG SCHEME PREFIX NPREFIX HAPREFIX LOADBALANCER CHANGESSTRING LIVEDIR DOCROOTDIR STAGINGDIR LIVEDIR WORKINGDIR DOMAINSFILE RSYNCSTERSCRIPT DRUPALCACHE APPSERVERS APPSERVERSSHORTNAME APPSERVERSMASTER LIBDIR LOGDIR WEBUSER status exclusions waittime stagingservers webservers

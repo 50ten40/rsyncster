@@ -20,6 +20,5 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
-*/4 * * * * /home/kelley/rsyncster/cron-get-changes.sh >/dev/null 2>&1
-#0 10 * * * /home/kelley/manage/cron-rsync-rackspace-dbbackup.sh >/dev/null 2>&1
-#00 00 01 01 * /home/kelley/rsyncster/end_of_year_updates.sh >/dev/null 2>&1
+*/4 * * * * /<path_to_user_home>/rsyncster/cron-get-changes.sh >/dev/null 2>&1
+#00 00 01 01 * /<path_to_user_home>/rsyncster/end_of_year_updates.sh >/dev/null 2>&1
