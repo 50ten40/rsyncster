@@ -4,6 +4,8 @@ DEBUG="yes"
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Use for sanity checks.
 SCHEME="https://"
 PREFIX="m" # Subdomain DNS prefix required for local CMS processing.
+NPREFIX="static" # Used for nginx auto config
+HAPREFIX="" # Haproxy + nginx servers auto config
 LOADBALANCER="lbint" # Where to point wget. See wait_time wget option.
 CHANGESSTRING=".changes" # Identifying string for working files
 DOCROOTDIR="/var/www/html"
@@ -25,4 +27,4 @@ waittime="" # Passed to wget to manage server load during fetch.
 stagingservers=(localhost 192.168.0.206)
 webservers=(192.168.0.206 192.168.0.147 192.237.251.89 69.137.188.72)
 
-export DEBUG SCHEME PREFIX LOADBALANCER CHANGESSTRING LIVEDIR DOCROOTDIR STAGINGDIR LIVEDIR WORKINGDIR DOMAINSFILE RSYNCSTERSCRIPT DRUPALCACHE APPSERVERS APPSERVERSSHORTNAME APPSERVERSMASTER LIBDIR LOGDIR WEBUSER status exclusions waittime stagingservers webservers
+export DEBUG SCHEME PREFIX NPREFIX HAPREFIX LOADBALANCER CHANGESSTRING LIVEDIR DOCROOTDIR STAGINGDIR LIVEDIR WORKINGDIR DOMAINSFILE RSYNCSTERSCRIPT DRUPALCACHE APPSERVERS APPSERVERSSHORTNAME APPSERVERSMASTER LIBDIR LOGDIR WEBUSER status exclusions waittime stagingservers webservers

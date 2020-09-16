@@ -60,13 +60,9 @@ for i in ${webservers[@]}; do
 
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
 
-      if [ $i = "192.237.251.89" ]; then # for webservers behind haproxy listening on localhost. provisioned during site creation (extras)
+      if [ $i = "192.237.251.89" ]; then # for webservers behind haproxy listening on localhost.
 
-         NPREFIX="db2.static"
-
-      else
-
-         NPREFIX="static"
+         HAPREFIX="db2"
 
       fi
 
@@ -99,10 +95,16 @@ if ssh root@$i "[ -d "/etc/nginx" ]"; then
          REMOTE_NGINX_CMD="service nginx reload"
       fi
 
-      if ! ssh root@$i "test -e $REMOTE_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
+      if ! ssh root@$i "test -e $REMOTE_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
 
          echo " - TASK : Configuring nginx for $i" >> $status
-         nice -n 20 rsync -avilzx -e ssh $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:$REMOTE_NGINX_PATH/sites-available/
+
+	 if ! [ -e "$LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf" ] ; then # test for local file
+            sed s/listen       80;/listen       127.0.0.1:80/g $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf > $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf # create file if not exists
+            sed -i s/listen       [::]:80;/listen       [::1]:80;/g $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf
+         fi
+
+         nice -n 20 rsync -avilzx -e ssh $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf root@$i:$REMOTE_NGINX_PATH/sites-available/
 	 ssh root@$i "cd $REMOTE_NGINX_PATH/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
          ssh root@$i "service nginx reload"
          ssh root@$i "service nginx status"
