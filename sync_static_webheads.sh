@@ -1,15 +1,11 @@
 #!/bin/bash
 # push-datasync.sh - Push one site's updates from master server to front end web servers via rsync
 
-LIB_PATH="$HOME/manage/rsyncster/lib"
-. $LIB_PATH/env.sh
-. $LIB_PATH/function_timestamp.sh
+LIBPATH="$HOME/rsyncster/lib"
+. $LIBPATH/env.sh
+. $LIBPATH/function_timestamp.sh
 
-webservers=(192.168.0.206 192.168.0.67 192.237.251.89 73.24.185.56) #todo: get from .env.sh - we do not rely on syncthing due to delay on publish. eg staging->live.
-
-drupal_files_list=($(ssh $APP_SERVERS_MASTER 'bash /home/kelley/manage/rsyncster/drupalfiles_get.sh'))
-
-#status="$MANAGE_DIR/datasync-webheads-$1.status"
+drupal_files_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh'))
 
 if [ -d /tmp/.webheads.$1.lock ]; then
    
@@ -46,7 +42,7 @@ if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
    
 
     echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $ONEDOMAIN =====" >> $status
-    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APP_SERVERS_MASTER:$DOCROOT_DIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
+    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOTDIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
 
     if [ $? = "1" ]; then
 
@@ -63,24 +59,24 @@ for i in ${webservers[@]}; do
 
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
 
-      if ! [ $i = "192.237.251.89" ]; then
-
-         NPREFIX="static"
-
-      else
+      if [ $i = "192.237.251.89" ]; then
 
          NPREFIX="db2.static"
 
+      else
+
+         NPREFIX="static"
+
       fi
 
-      if ! ssh root@$i "test -L /var/www/html/live"; then # check for live folder, provision if needed. Todo: add folder path to .env.sh
+      if ! ssh root@$i "test -L $LIVEDIR" ; then # check for live folder, provision if needed.
 
          echo " - NOTICE : Docroot folder not found. Configuring docroot folder for $i" >> $status
-	 mkdir -v /var/www/html/live >> $status
+	 mkdir -v $LIVEDIR >> $status
 
       fi
 
-      nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIB_DIR/exclusions.lst -e ssh $DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/ root@$i:$DOCROOT_DIR/live/$PREFIX.$ONEDOMAIN/
+      nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
 
       if ! ssh root@$i "test -L /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manually at this time. TODO
 
