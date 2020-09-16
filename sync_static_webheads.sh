@@ -105,7 +105,7 @@ if ssh root@$i "[ -d "/etc/nginx" ]"; then
          fi
 
          nice -n 20 rsync -avilzx -e ssh $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf root@$i:$REMOTE_NGINX_PATH/sites-available/
-	 ssh root@$i "cd $REMOTE_NGINX_PATH/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
+	 ssh root@$i "cd $REMOTE_NGINX_PATH/sites-enabled && ln -s ../sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf" 
          ssh root@$i "service nginx reload"
          ssh root@$i "service nginx status"
 
