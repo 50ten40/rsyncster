@@ -23,7 +23,6 @@ status="$LOGDIR/datasync-$CHANGESSTRING.status"
 exclusions="$LIBDIR/exclusions.lst"
 waittime="" # Passed to wget to manage server load during fetch.
 stagingservers=(localhost 192.168.0.206)
-webservers=(192.168.0.206 192.168.0.147 192.237.251.89 73.24.185.56)
+webservers=(192.168.0.206 192.168.0.147 192.237.251.89 69.137.188.72)
 
 export DEBUG SCHEME PREFIX LOADBALANCER CHANGESSTRING LIVEDIR DOCROOTDIR STAGINGDIR LIVEDIR WORKINGDIR DOMAINSFILE RSYNCSTERSCRIPT DRUPALCACHE APPSERVERS APPSERVERSSHORTNAME APPSERVERSMASTER LIBDIR LOGDIR WEBUSER status exclusions waittime stagingservers webservers
-
