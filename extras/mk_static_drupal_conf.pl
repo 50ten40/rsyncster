@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+# run on linux appserver todo: update paths for *bsd servers.
 
 use DateTime qw();
 my $nowstring =	DateTime->now->strftime('%d%b%Y');
@@ -25,7 +26,7 @@ foreach (@domains) {
    $string .= "        listen       [::]:80;\n";
    $string .= "        server_name  $_;\n";  
    $string .= "        root /var/www/html/live/m.$_; ## <-- Your only path reference.\n";
-   $string .= "        include snippets/rsyncster-nginx-snippets-drupal.conf;\n";
+   $string .= "        include snippets/rsyncster_static_sites.conf;\n"; # must exist. we do not create
    $string .= "\}\n";
 
    open(STATIC_CONFIG, ">$config_path") or die $!;
