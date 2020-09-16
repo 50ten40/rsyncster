@@ -78,11 +78,19 @@ for i in ${webservers[@]}; do
 
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
 
-      if ! ssh root@$i "test -L /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manually at this time. TODO
+      if ssh root@$i "[ -d "/etc/nginx" ]; then
+         echo " - NOTICE : Found linux nginx config dir on $i" >> $status 
+         NGINX_PATH="/etc/nginx"
+      else
+         echo " - NOTICE : Found bsd nginx config dir on $i" >> $status
+         NGINX_PATH="/usr/local/etc/nginx"
+      fi
+
+      if ! ssh root@$i "test -L $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # sites-available, sites-enabled, snippets and such must be provisioned manually at this time. TODO
 
          echo " - TASK : Configuring nginx for $i" >> $status
-         nice -n 20 rsync -avilzx -e ssh /etc/nginx/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:/etc/nginx/sites-available/
-	 ssh root@$i "cd /etc/nginx/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
+         nice -n 20 rsync -avilzx -e ssh $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:$NGINX_PATH/sites-available/
+	 ssh root@$i "cd $NGINX_PATH/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
          ssh root@$i "service nginx reload"
          ssh root@$i "service nginx status"
 
