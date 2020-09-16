@@ -60,7 +60,7 @@ for i in ${webservers[@]}; do
 
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
 
-      if [ $i = "192.237.251.89" ]; then
+      if [ $i = "192.237.251.89" ]; then # for webservers behind haproxy listening on localhost. provisioned during site creation (extras)
 
          NPREFIX="db2.static"
 
@@ -79,19 +79,31 @@ for i in ${webservers[@]}; do
 
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
 
-      if ssh root@$i "[ -d "/etc/nginx" ]"; then
-         echo " - NOTICE : Found linux nginx config dir on $i" >> $status 
-         NGINX_PATH="/etc/nginx"
+      if "[ -d "/etc/nginx" ]"; then
+         echo " - NOTICE : Found local linux nginx config dir on $i" >> $status
+         LOCAL_NGINX_PATH="/etc/nginx"
+         LOCAL_NGINX_CMD="systemctl condreload nginx"
       else
-         echo " - NOTICE : Found bsd nginx config dir on $i" >> $status
-         NGINX_PATH="/usr/local/etc/nginx"
+         echo " - NOTICE : Found local bsd nginx config dir on $i" >> $status
+         LOCAL_NGINX_PATH="/usr/local/etc/nginx"
+         LOCAL_NGINX_CMD="service nginx reload"
       fi
 
-      if ! ssh root@$i "test -e $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
+if ssh root@$i "[ -d "/etc/nginx" ]"; then
+         echo " - NOTICE : Found remote linux nginx config dir on $i" >> $status
+         REMOTE_NGINX_PATH="/etc/nginx"
+         REMOTE_NGINX_CMD="systemctl condreload nginx"
+      else
+         echo " - NOTICE : Found remote bsd nginx config dir on $i" >> $status
+         REMOTE_NGINX_PATH="/usr/local/etc/nginx"
+         REMOTE_NGINX_CMD="service nginx reload"
+      fi
+
+      if ! ssh root@$i "test -e $REMOTE_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
 
          echo " - TASK : Configuring nginx for $i" >> $status
-         nice -n 20 rsync -avilzx -e ssh $NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:$NGINX_PATH/sites-available/
-	 ssh root@$i "cd $NGINX_PATH/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
+         nice -n 20 rsync -avilzx -e ssh $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf root@$i:$REMOTE_NGINX_PATH/sites-available/
+	 ssh root@$i "cd $REMOTE_NGINX_PATH/sites-enabled && ln -s ../sites-available/$NPREFIX.$ONEDOMAIN.conf" 
          ssh root@$i "service nginx reload"
          ssh root@$i "service nginx status"
 
