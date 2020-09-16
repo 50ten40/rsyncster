@@ -10,6 +10,7 @@ drupal_files_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get
 if [ -d /tmp/.webheads.$1.lock ]; then
    
    echo " - TASK : lock exists : Continuing sync of $1" >> $status
+   cat $status
    exit 1
 
 fi
@@ -78,7 +79,7 @@ for i in ${webservers[@]}; do
 
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
 
-      if ssh root@$i "[ -d "/etc/nginx" ]; then
+      if ssh root@$i "[ -d "/etc/nginx" ]"; then
          echo " - NOTICE : Found linux nginx config dir on $i" >> $status 
          NGINX_PATH="/etc/nginx"
       else
