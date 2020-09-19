@@ -100,7 +100,7 @@ if ssh root@$i "[ -d "/etc/nginx" ]"; then
          echo " - TASK : Configuring nginx for $i" >> $status
 
 	 if ! [ -e "$LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf" ] ; then # test for local file
-            sed -e 's/\([[:space:]]\)80/\1127.0.0.1\:80/g' $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf > $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf # create file if not exists
+            sed -e 's/([[:space:]])80/\1127.0.0.1\:80/g' $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf > $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf # create file if not exists
             sed -ie 's/]/1]/g' $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf
          fi
 
