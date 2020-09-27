@@ -39,23 +39,6 @@ else
 
 fi
 
-if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then # need to add logic for finding drupal root path for standalone sites
-   
-
-    echo "$(timestamp) - TASK : ===== Syncing sites/default/files for $ONEDOMAIN =====" >> $status
-    nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/kelleygraham.com/sites/default/files/$ONEDOMAIN/ $DOCROOTDIR/live/$PREFIX.$ONEDOMAIN/sites/default/files/
-
-    if [ $? = "1" ]; then
-
-      echo "$(timestamp) - FAILURE : Failed rsync of sites/default/files for $ONEDOMAIN. Please refer to the solution documentation " >> $status
-      exit 1
-
-   fi
-
-      echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $ONEDOMAIN =====" >> $status
-
-fi
-
 for i in ${webservers[@]}; do
 
    echo " - TASK : ===== Beginning rsync push of static content to webhead $i =====" >> $status
@@ -73,7 +56,23 @@ for i in ${webservers[@]}; do
 
       fi
 
+      echo "$(timestamp) - TASK : =====  Syncing $LIVEDIR for $ONEDOMAIN =====" >> $status
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
+
+      #if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
+         #echo "$(timestamp) - TASK : ===== Syncing drupalfiles for $ONEDOMAIN =====" >> $status
+         #DRUPALFILES_PATH=$(get_drupalfiles_path($ONEDOMAIN))
+         #nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/$ONEDOMAIN/$DRUPALFILES_PATH $DOCROOTDIR/live/$PREFIX.$ONEDOMAIN/
+
+         #if [ $? = "1" ]; then
+             #echo "$(timestamp) - FAILURE : Failed rsync of sites/default/files for $ONEDOMAIN. Please refer to the solution documentation " >> $status
+             #exit 1
+         #fi
+
+         #echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $ONEDOMAIN =====" >> $status
+
+      fi
+
 
       if "[ -d "/etc/nginx" ]"; then
          echo " - NOTICE : Found local linux nginx config dir on $i" >> $status
@@ -85,7 +84,7 @@ for i in ${webservers[@]}; do
          LOCAL_NGINX_CMD="service nginx reload"
       fi
 
-if ssh root@$i "[ -d "/etc/nginx" ]"; then
+      if ssh root@$i "[ -d "/etc/nginx" ]"; then
          echo " - NOTICE : Found remote linux nginx config dir on $i" >> $status
          REMOTE_NGINX_PATH="/etc/nginx"
          REMOTE_NGINX_CMD="systemctl condreload nginx"
