@@ -64,13 +64,13 @@ for i in ${webservers[@]}; do
 
          if [ $ONEDOMAIN == $DRUPAL_MULTISITE_DOMAIN ] ; then
             echo " - TASK - $1 is Drupal Primary Multisite" >> $status 
-            DRUPALFILES_ROOT="$DOCROOT/$ONEDOMAIN"
+            DRUPALFILES_ROOT="$DOCROOTDIR/$ONEDOMAIN"
          elif [[ " ${DRUPAL_DEV_DOMAINS[@]} " =~ " $ONEDOMAIN " ]]; then
             echo " - TASK - $1 is Drupal Development or Standalone site" >> $status
-            DRUPALFILES_ROOT="$DOCROOT/$ONEDOMAIN"
+            DRUPALFILES_ROOT="$DOCROOTDIR/$ONEDOMAIN"
          else
             #echo " - TASK - $1 is Drupal subsite under $DRUPAL_MULTISITE_DOMAIN" >> $status
-            DRUPALFILES_ROOT="$DOCROOT/$DRUPAL_MULTISITE_DOMAIN/sites/$ONEDOMAIN"
+            DRUPALFILES_ROOT="$DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN/sites/$ONEDOMAIN"
          fi
 
          DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
