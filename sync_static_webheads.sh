@@ -71,7 +71,7 @@ for i in ${webservers[@]}; do
 
          #echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $ONEDOMAIN =====" >> $status
 
-      fi
+      #fi
 
 
       if "[ -d "/etc/nginx" ]"; then
