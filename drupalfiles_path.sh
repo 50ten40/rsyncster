@@ -12,7 +12,7 @@ if ! [ -d "/var/www/html/kelleygraham.com/sites" ] ; then # check if we are on a
    exit 1
 fi
 
-if [ $1==$DRUPAL_MULTISITE_DOMAIN ] ; then
+if [ $1 == $DRUPAL_MULTISITE_DOMAIN ] ; then
    #echo " - TASK - $1 is Drupal Primary Multisite" >> $status 
    drupalfiles_path="sites/default/files"
 elif [[ " ${DRUPAL_DEV_DOMAINS[@]} " =~ " $1 " ]]; then
