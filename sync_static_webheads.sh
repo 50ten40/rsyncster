@@ -63,7 +63,7 @@ for i in ${webservers[@]}; do
 
          echo "$(timestamp) - TASK : ===== Syncing drupalfiles for $ONEDOMAIN =====" >> $status
 
-         if [ $ONEDOMAIN = $DRUPAL_MULTISITE_DOMAIN ] ; then
+         if [ "$ONEDOMAIN" = "$DRUPAL_MULTISITE_DOMAIN" ] ; then
 
             echo " - TASK - $1 is Drupal Primary Multisite" >> $status 
             DRUPALFILES_ROOT="$DOCROOTDIR/$ONEDOMAIN"
@@ -77,11 +77,21 @@ for i in ${webservers[@]}; do
 
             #echo " - TASK - $1 is Drupal subsite under $DRUPAL_MULTISITE_DOMAIN" >> $status
             DRUPALFILES_ROOT="$DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN"
+	    MULTI_PATH="$ONEDOMAIN/"
 
          fi
 
-         DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
-         nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DRUPALFILES_ROOT/$DRUPALFILES_PATH/ $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH/
+         DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER "bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN"))
+         echo "DRUPALFILES_PATH is set to $DRUPALFILES_PATH"
+
+	 if ! [[ -d $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH ]] ; then 
+	    
+ 	    echo " - TASK - $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH not found, creating" >> $status        
+	    mkdir -pv $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH >> $status
+	 
+	 fi
+	
+	 nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DRUPALFILES_ROOT/$DRUPALFILES_PATH/ $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH/$MULTI_PATH
 
          if [ $? = "1" ]; then
              echo "$(timestamp) - FAILURE : Failed rsync of $DRUPALFILES_PATH for $ONEDOMAIN. Please refer to the solution documentation " >> $status
