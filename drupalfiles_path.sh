@@ -12,13 +12,13 @@ fi
 
 if [ $1 == $DRUPAL_MULTISITE_DOMAIN ] ; then
    echo " - TASK - $1 is Drupal Primary Multisite" >> $status 
-   $drupalfiles_path="sites/default/files"
+   drupalfiles_path="sites/default/files"
 elif [[ " ${DRUPAL_DEV_DOMAINS[@]} " =~ " $1 " ]]; then
    echo " - TASK - $1 is Drupal Development or Standalone site" >> $status
-   $drupalfiles_path="sites/default/files"
+   drupalfiles_path="sites/default/files"
 else
    echo " - TASK - $1 is Drupal subsite under $DRUPAL_MULTISITE_DOMAIN" >> $status
-   $drupalfiles_path="sites/default/files/$1"
+   drupalfiles_path="sites/default/files/$1"
 fi
 
 echo " - TASK - Found drupalfiles path at $drupalfiles_path" >> $status
