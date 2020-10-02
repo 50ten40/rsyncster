@@ -62,7 +62,7 @@ for i in ${webservers[@]}; do
       if [ $(printf ${drupalfiles_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
          echo "$(timestamp) - TASK : ===== Syncing drupalfiles for $ONEDOMAIN =====" >> $status
          DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
-         nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/$ONEDOMAIN/$DRUPALFILES_PATH/ $DOCROOTDIR/live/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH/
+         nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/$ONEDOMAIN/$DRUPALFILES_PATH/ $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH/
 
          if [ $? = "1" ]; then
              echo "$(timestamp) - FAILURE : Failed rsync of $DRUPALFILES_PATH for $ONEDOMAIN. Please refer to the solution documentation " >> $status
