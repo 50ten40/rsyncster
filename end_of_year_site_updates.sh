@@ -8,9 +8,7 @@ cd $WORKINGDIR
 
 echo "$(timestamp)- TASK - Getting local drupal files list on $APPSERVERSMASTER"
 
-drupal_files_list=$(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh')
-
-#mapfile -t <$HOME/rsyncster/virt_domains.list
+drupal_files_list=$(bash $HOME/rsyncster/drupalfiles_get.sh)
 
    for d in "${drupal_files_list[@]}"; do
 	echo "$(timestamp) - TASK - Setting up end of year refresh for ${d%%/}"
