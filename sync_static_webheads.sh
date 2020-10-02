@@ -5,7 +5,7 @@ LIBPATH="$HOME/rsyncster/lib"
 . $LIBPATH/env.sh
 . $LIBPATH/function_timestamp.sh
 
-drupal_files_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh'))
+drupalfiles_list=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_get.sh'))
 
 if [ -d /tmp/.webheads.$1.lock ]; then
    
@@ -59,17 +59,17 @@ for i in ${webservers[@]}; do
       echo "$(timestamp) - TASK : =====  Syncing $LIVEDIR for $ONEDOMAIN =====" >> $status
       nice -n 20 rsync -avilzx --delete-before --exclude-from=$LIBDIR/exclusions.lst -e ssh $LIVEDIR/$PREFIX.$ONEDOMAIN/ root@$i:$LIVEDIR/$PREFIX.$ONEDOMAIN/
 
-      #if [ $(printf ${drupal_files_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
+      #if [ $(printf ${drupalfiles_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
          #echo "$(timestamp) - TASK : ===== Syncing drupalfiles for $ONEDOMAIN =====" >> $status
-         #DRUPALFILES_PATH=$(get_drupalfiles_path($ONEDOMAIN))
+         #DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
          #nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/$ONEDOMAIN/$DRUPALFILES_PATH $DOCROOTDIR/live/$PREFIX.$ONEDOMAIN/
 
          #if [ $? = "1" ]; then
-             #echo "$(timestamp) - FAILURE : Failed rsync of sites/default/files for $ONEDOMAIN. Please refer to the solution documentation " >> $status
+             #echo "$(timestamp) - FAILURE : Failed rsync of $DRUPALFILES_PATH for $ONEDOMAIN. Please refer to the solution documentation " >> $status
              #exit 1
          #fi
 
-         #echo "$(timestamp) - SUCCESS : ===== Completed rsync of sites/default/files for $ONEDOMAIN =====" >> $status
+         #echo "$(timestamp) - SUCCESS : ===== Completed rsync of $DRUPALFILES_PATH for $ONEDOMAIN =====" >> $status
 
       #fi
 
