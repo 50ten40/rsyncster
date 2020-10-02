@@ -61,8 +61,20 @@ for i in ${webservers[@]}; do
 
       if [ $(printf ${drupalfiles_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
          echo "$(timestamp) - TASK : ===== Syncing drupalfiles for $ONEDOMAIN =====" >> $status
+
+         if [ $ONEDOMAIN == $DRUPAL_MULTISITE_DOMAIN ] ; then
+            echo " - TASK - $1 is Drupal Primary Multisite" >> $status 
+            DRUPALFILES_ROOT="$DOCROOT/$ONEDOMAIN"
+         elif [[ " ${DRUPAL_DEV_DOMAINS[@]} " =~ " $ONEDOMAIN " ]]; then
+            echo " - TASK - $1 is Drupal Development or Standalone site" >> $status
+            DRUPALFILES_ROOT="$DOCROOT/$ONEDOMAIN"
+         else
+            #echo " - TASK - $1 is Drupal subsite under $DRUPAL_MULTISITE_DOMAIN" >> $status
+            DRUPALFILES_ROOT="$DOCROOT/$DRUPAL_MULTISITE_DOMAIN/sites/$ONEDOMAIN"
+         fi
+
          DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
-         nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DOCROOTDIR/$ONEDOMAIN/$DRUPALFILES_PATH/ $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH/
+         nice -n 20 rsync -avilzx --delete-before -e ssh root@$APPSERVERSMASTER:$DRUPALFILES_ROOT/$DRUPALFILES_PATH/ $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH/
 
          if [ $? = "1" ]; then
              echo "$(timestamp) - FAILURE : Failed rsync of $DRUPALFILES_PATH for $ONEDOMAIN. Please refer to the solution documentation " >> $status
