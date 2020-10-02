@@ -70,7 +70,7 @@ for i in ${webservers[@]}; do
             DRUPALFILES_ROOT="$DOCROOTDIR/$ONEDOMAIN"
          else
             #echo " - TASK - $1 is Drupal subsite under $DRUPAL_MULTISITE_DOMAIN" >> $status
-            DRUPALFILES_ROOT="$DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN/sites/$ONEDOMAIN"
+            DRUPALFILES_ROOT="$DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN"
          fi
 
          DRUPALFILES_PATH=($(ssh $APPSERVERSMASTER 'bash $HOME/rsyncster/drupalfiles_path.sh $ONEDOMAIN'))
