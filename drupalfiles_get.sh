@@ -1,15 +1,19 @@
 #!/bin/bash
-# This helper script get domains list from primary APPSERVER
+# This helper script gets domains list from primary APPSERVER
 
-ignore_files=(all default permatecture.pro faf.photos braingurus.com signup.fafchat.com signup.faf.chat signup.faf.photos rodpweiss.com signup.faf.social signup.mastery.chat)
+LIBPATH="$HOME/rsyncster/lib"
+. $LIBPATH/env.sh
 
-if [ -d "/var/www/html/kelleygraham.com/sites" ] ; then # check if we are on an appserver
-   cd /var/www/html/kelleygraham.com/sites
-   shopt -s dotglob 
+if [ -d "$DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN/sites" ] ; then # check if we are on primary appserver
+   cd $DOCROOTDIR/$DRUPAL_MULTISITE_DOMAIN/sites
+   shopt -s dotglob
    shopt -s nullglob
    drupalfiles=(*/)
 else
-   echo "Please run on primary APPSERVER"
+   echo " - FAILURE - Please run on primary appserver -- $APPSERVERSMASTER --" >> $status
+   if [[ $DEBUG="yes" ]] ; then
+      cat $status | grep FAILURE
+   fi
    exit 1
 fi
 
