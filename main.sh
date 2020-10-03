@@ -28,4 +28,13 @@ else
 
 fi
 
+# Check that domain exists
+if ! [ $(printf ${drupalfiles_list[@]} | grep -o "$1" | wc -w) ] ; then
+
+   echo " - FAILURE - Domain must exist" >> $status
+   cat $status | grep FAILURE
+   exit 1
+
+fi
+
 $HOME/rsyncster/wget_static_drupal.pl $1 && $HOME/rsyncster/publish.sh $1 && $HOME/rsyncster/sync_static_webheads.sh $1

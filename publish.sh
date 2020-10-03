@@ -18,6 +18,15 @@ else
    exit
 fi
 
+# Check that domain exists
+if ! [ $(printf ${drupalfiles_list[@]} | grep -o "$ONEDOMAIN" | wc -w) ] ; then
+
+   echo " - FAILURE - Domain must exist" >> $status
+   cat $status | grep FAILURE
+   exit 1
+
+fi
+
 if [ $? == "1" ]; then
    echo "$(timestamp) - FAILURE : cannot create lock" >> $status
    exit 1
