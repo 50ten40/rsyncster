@@ -140,6 +140,7 @@ foreach (@domains) {
                         system("echo \"$msg\" >> $status_file");
 
    		system("/usr/local/bin/wget -nH -mpk --base=$host --exclude-directories=$exclude_list --no-check-certificate --user-agent=\"\" --restrict-file-names=windows -e robots=off $waitTime $URL");
+		
 		open(DOMS,"+< $domains_list") or die $!;
                         my @doms = <DOMS>;
                         foreach my $line (@doms) {
