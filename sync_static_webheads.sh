@@ -111,7 +111,7 @@ for i in ${webservers[@]}; do
              exit 1
          fi
 
-         if ! ssh root@$i [[ -d $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH ]] ; then
+         if ! ssh root@$i "[[ -d $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH ]]"; then
 
             echo " - NOTICE - remote dir $i:$LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH not found, creating" >> $status
             ssh root@$i "mkdir -pv $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH" >> $status
