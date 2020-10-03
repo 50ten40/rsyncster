@@ -22,7 +22,7 @@ DRUPAL_MULTISITE_DOMAIN="kelleygraham.com"
 
 # drupal development and mixed docroot environment. TODO: cleanup dotglobbing
 DRUPAL_WEBHEAD_PATH="sites/default/files" # path to push drupafiles to webheads
-DRUPAL_DEV_DOMAINS=(50ten40.com cinematic.tools durastudio.com exif.studio learner.tools tucsonkids.com makerlab.50ten40.com)
+DRUPAL_DEV_DOMAINS=(50ten40.com cinematic.tools durastudio.com exif.studio learner.tools tucsonkids.com)
 DRUPAL_LEARN_DOMAINS=(lrs.learner.tools learn.taichiboost.com learn.sifuondemand.com moodledata-nfs maker.50ten40.com learn.sifuondemand.com online.learner.tools online.learner.tools-moodle-local stodkphoto.tools learn.unbreakable.center learn.taichiboost.com rumsoakedfist.org dev.rumsoakedfist.org stockphoto.tools)
 DRUPAL_ANALYTICS_DOMAINS=(analytics.durastudio.com)
 
