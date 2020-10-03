@@ -1,5 +1,5 @@
 #!/bin/bash
-# This helper script gets domains list from primary APPSERVER
+# This helper script gets multisite domains list from primary APPSERVER
 
 LIBPATH="$HOME/rsyncster/lib"
 . $LIBPATH/env.sh
