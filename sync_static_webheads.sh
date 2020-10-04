@@ -111,7 +111,7 @@ for i in ${webservers[@]}; do
              exit 1
          fi
 
-         if ! ssh root@$i "[[ -d $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH ]]"; then
+         if ! ssh root@$i "test -d $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPAL_WEBHEAD_PATH" ; then
 
             echo " - NOTICE - remote dir $i:$LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH not found, creating" >> $status
             ssh root@$i "mkdir -pv $LIVEDIR/$PREFIX.$ONEDOMAIN/$DRUPALFILES_PATH" >> $status
@@ -128,24 +128,28 @@ for i in ${webservers[@]}; do
       fi
 
 
-      if "[ -d "/etc/nginx" ]"; then
-         echo " - NOTICE : Found local linux nginx config dir on $i" >> $status
+      if [ -d '/etc/nginx' ]; then
+         echo " - NOTICE - Found local linux nginx config dir on $i" >> $status
          LOCAL_NGINX_PATH="/etc/nginx"
          LOCAL_NGINX_CMD="systemctl condreload nginx"
+         LOCAL_NGINX_STATUS="systemctl status nginx"
       else
-         echo " - NOTICE : Found local bsd nginx config dir on $i" >> $status
+         echo " - NOTICE - Found local bsd nginx config dir on $i" >> $status
          LOCAL_NGINX_PATH="/usr/local/etc/nginx"
          LOCAL_NGINX_CMD="service nginx reload"
+         LOCAL_NGINX_STATUS="service nginx status"
       fi
 
-      if ssh root@$i "[ -d "/etc/nginx" ]"; then
-         echo " - NOTICE : Found remote linux nginx config dir on $i" >> $status
+      if ssh root@$i "test -d '/etc/nginx'"; then
+         echo " - NOTICE - Found remote linux nginx config dir on $i" >> $status
          REMOTE_NGINX_PATH="/etc/nginx"
          REMOTE_NGINX_CMD="systemctl condreload nginx"
+         REMOTE_NGINX_STATUS="systemctl status nginx"
       else
-         echo " - NOTICE : Found remote bsd nginx config dir on $i" >> $status
+         echo " - NOTICE - Found remote bsd nginx config dir on $i" >> $status
          REMOTE_NGINX_PATH="/usr/local/etc/nginx"
          REMOTE_NGINX_CMD="service nginx reload"
+         REMOTE_NGINX_STATUS="service nginx status"
       fi
 
       if ! ssh root@$i "test -e $REMOTE_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf"; then # basic nginx provisioning must be complete. Later autoprovision. 
@@ -153,17 +157,18 @@ for i in ${webservers[@]}; do
          echo " - TASK : Configuring nginx for $i" >> $status
 
 	 if ! [ -e "$LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf" ] ; then # test for local file
+            echo " - NOTICE - $HAPREFIX$NPREFIX.$ONEDOMAIN.conf NOT found, creating" >> $status
             sed -E 's/([[:space:]])80/\1127.0.0.1\:80/g' $LOCAL_NGINX_PATH/sites-available/$NPREFIX.$ONEDOMAIN.conf > $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf # create file if not exists
             sed -i 's/]/1]/g' $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf
          fi
 
          rsync -avilzx -e ssh $LOCAL_NGINX_PATH/sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf root@$i:$REMOTE_NGINX_PATH/sites-available/
 	 ssh root@$i "cd $REMOTE_NGINX_PATH/sites-enabled && ln -s ../sites-available/$HAPREFIX$NPREFIX.$ONEDOMAIN.conf"
-         ssh root@$i "service nginx reload" >> $status
-         ssh root@$i "service nginx status" >> $status
+         ssh root@$i "$REMOTE_NGINX_CMD" >> $status
+         ssh root@$i "$REMOTE_NGINX_STATUS" >> $status
 
          if [ $DEBUG="yes" ] ; then
-            cat $status | grep nginx
+            cat $status | grep NOTICE
          fi
       fi
 
