@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEBUG="yes"
+DEBUG="no"
 #NGINX_ENABLED_DIR="/etc/nginx/sites-enabled" # Use for sanity checks.
 SCHEME="https://"
 PREFIX="m" # Subdomain DNS prefix required for local CMS processing.
