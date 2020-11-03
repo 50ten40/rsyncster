@@ -12,7 +12,7 @@ DOCROOTDIR="/var/www/html"
 STAGINGDIR="$DOCROOTDIR/staging"
 LIVEDIR="$DOCROOTDIR/live"
 WORKINGDIR="$DOCROOTDIR/$CHANGESSTRING" # Processing directory. Make sure nginx has rule for securing dotfiles.
-DOMAINSFILE="$WORKINGDIR/domains.lst"
+DOMAINSFILE="$WORKINGDIR/domains.lst" # Get domains from docroot dir
 RSYNCSTERSCRIPT="$HOME/rsyncster/main.sh"
 DRUPALCACHE="Off" # Off by default. Script will not clear cache. If enabled, know the performance hit on larger sites.
 APPSERVERS="cloud1int cloud2int"
@@ -28,6 +28,7 @@ DRUPAL_ANALYTICS_DOMAINS=(analytics.durastudio.com)
 
 # other variables
 LIBDIR="$HOME/rsyncster/lib"
+DOMAINSCHK="$LIBDIR/domains.chk" # Get domains from manual managed file for sanity checking. (payment deactivation, typos and such)
 LOGDIR="/var/log/rsyncster"
 WEBUSER="kelley"
 status="$LOGDIR/datasync-$CHANGESSTRING.status"
