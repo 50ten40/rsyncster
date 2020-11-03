@@ -38,12 +38,23 @@ aggregate_changes() {
    done
 
    mapfile -t <$DOMAINSFILE
+   CHECKFILE=mapfile <$DOMAINSCHK
 
    for d in "${MAPFILE[@]}"; do
 
+      echo " - TASK : Performing sanity check(S) for domain $d" >> $status
+      if [[ ! -z $(printf '%s\n' "${CHECKFILE[@]}" | grep -w $d) ]] ; then
+
+         echo " - NOTICE : $d not enabled for sync. Contact domain manager" >> $status
+         cat $status
+         exit 1
+         
+      fi
+
       if [ ! -d $WORKINGDIR/$d ] ; then
-      
+
          mkdir $WORKINGDIR/$d
+
       fi
 		
       if [ ! -s $WORKINGDIR/$d/$PREFIX.$d ] ; then
